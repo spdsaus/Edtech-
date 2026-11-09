@@ -1,0 +1,6 @@
+{
+  "name": "NexGen Teacher",
+  "description": "Premium EdTech SaaS for teachers: Plan CAPS lessons with timing validation, communicate safely with parents in multiple languages, and manage classes & tasks.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
