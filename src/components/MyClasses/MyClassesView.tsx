@@ -518,6 +518,54 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
         </div>
       </div>
 
+      {showClassModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gray-100 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b">
+              <div>
+                <h3 className="text-base font-bold text-[#171936]">Create a Class</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Set up a class before adding learners.</p>
+              </div>
+              <button type="button" onClick={() => setShowClassModal(false)} className="text-gray-400 hover:text-gray-600 p-1" aria-label="Close class form">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleSaveClass} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">Grade</label>
+                  <select value={classForm.grade} onChange={(e) => setClassForm({ ...classForm, grade: e.target.value, section: '' })} className="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white">
+                    {['8', '9', '10', '11', '12'].map((grade) => <option key={grade} value={grade}>Grade {grade}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">Class Code</label>
+                  <input required value={classForm.section} onChange={(e) => setClassForm({ ...classForm, section: e.target.value.toUpperCase() })} placeholder={classForm.grade + 'A'} className="w-full px-3 py-2 rounded-xl border border-gray-200" />
+                </div>
+              </div>
+              <div>
+                <label className="font-bold text-gray-700 block mb-1">Subject</label>
+                <input required value={classForm.subject} onChange={(e) => setClassForm({ ...classForm, subject: e.target.value })} placeholder="e.g. Natural Sciences" className="w-full px-3 py-2 rounded-xl border border-gray-200" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">Room (optional)</label>
+                  <input value={classForm.room} onChange={(e) => setClassForm({ ...classForm, room: e.target.value })} placeholder="e.g. Room 12" className="w-full px-3 py-2 rounded-xl border border-gray-200" />
+                </div>
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">Period / Schedule (optional)</label>
+                  <input value={classForm.periodSchedule} onChange={(e) => setClassForm({ ...classForm, periodSchedule: e.target.value })} placeholder="e.g. Period 2" className="w-full px-3 py-2 rounded-xl border border-gray-200" />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-3 border-t">
+                <button type="button" onClick={() => setShowClassModal(false)} className="px-3 py-2 rounded-xl bg-gray-100 text-gray-700 font-semibold">Cancel</button>
+                <button type="submit" className="px-4 py-2 rounded-xl bg-[#5145C5] text-white font-bold hover:bg-[#4337b0]">Create Class</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* ================================================================ */}
       {/* MODAL 1: ADD / EDIT LEARNER */}
       {/* ================================================================ */}
