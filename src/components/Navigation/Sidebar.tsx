@@ -181,7 +181,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               ? 'bg-[#1C2044] border-[#2D3369] text-emerald-300 hover:bg-[#232854]'
               : 'bg-amber-950/40 border-amber-800/60 text-amber-300 hover:bg-amber-950/60'
           }`}
-          title="Click to toggle simulated online / offline load-shedding mode"
+          title="Toggle the prototype's local/offline indicator; no cloud connection exists."
         >
           <div className="flex items-center gap-2">
             {settings.isOnlineMode ? (
@@ -189,7 +189,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             ) : (
               <WifiOff className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             )}
-            <span>{settings.isOnlineMode ? 'Simulated Online' : 'Offline / Load-Shedding'}</span>
+            <span>{settings.isOnlineMode ? 'Local storage' : 'Offline indicator'}</span>
           </div>
           {settings.pendingSyncCount > 0 ? (
             <span className="text-[10px] bg-amber-500 text-white font-bold px-1.5 py-0.5 rounded-full">
