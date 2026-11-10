@@ -207,14 +207,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               ND
             </div>
             <div className="text-left">
-              <div className="text-xs font-semibold text-white leading-tight">Ms. Dlamini</div>
-              <div className="text-[10px] text-[#8C93C7]">Natural Sciences HOD</div>
+              <div className="text-xs font-semibold text-white leading-tight">Your profile</div>
+              <div className="text-[10px] text-[#8C93C7]">Set up your profile</div>
             </div>
           </div>
           <button
             onClick={onResetDemo}
             className="p-1.5 text-[#8C93C7] hover:text-white hover:bg-[#20254D] rounded-lg transition-colors"
-            title="Reset to fresh demo data"
+            title="Clear local prototype data"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
