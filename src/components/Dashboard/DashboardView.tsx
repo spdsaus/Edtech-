@@ -458,19 +458,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
 
               <div className="space-y-2">
-                <div className="text-xs font-bold text-gray-500 uppercase">3 Urgent Action Items</div>
+                <div className="text-xs font-bold text-gray-500 uppercase">Priority actions</div>
                 <ul className="space-y-1.5 text-xs">
                   <li className="flex items-start gap-2">
                     <span className="text-amber-500 font-bold">1.</span>
-                    <span>Check 7 optical microscopes and onion root tip slides in Biology Lab 2 before 09:45.</span>
+                    <span>Add tasks to see priority actions here.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-indigo-500 font-bold">2.</span>
-                    <span>Grade 9A exit tickets need scoring during period 6 free admin period.</span>
+                    <span>Your upcoming tasks will appear in this briefing.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-500 font-bold">3.</span>
-                    <span>POPIA Safeguard: Kagiso Modise (10B) parent is opted out of broadcasts; communicate via term report only.</span>
+                    <span>Consent and communication status will be shown for your own contacts.</span>
                   </li>
                 </ul>
               </div>
