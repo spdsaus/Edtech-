@@ -4,7 +4,6 @@ on:
   # Publish only after reviewed changes reach main.
   push:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
