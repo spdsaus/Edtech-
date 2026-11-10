@@ -54,7 +54,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       textbooks: [...prev.textbooks, newTextbook.trim()],
     }));
     setNewTextbook('');
-    showToast('info', 'Textbook Added', 'CAPS approved material registered.');
+    showToast('info', 'Textbook Added', 'Reference added. Verify curriculum alignment and textbook details independently.');
   };
 
   const handleRemoveTextbook = (index: number) => {
@@ -284,7 +284,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         <div className="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b">
             <Moon className="w-4 h-4 text-purple-600" />
-            <h3 className="text-sm font-bold text-[#171936]">Quiet Hours & POPIA Policy</h3>
+            <h3 className="text-sm font-bold text-[#171936]">Quiet Hours & Consent Preferences</h3>
           </div>
 
           <div className="space-y-3">
@@ -354,7 +354,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
 
-        {/* Card 4: Approved CAPS Textbooks */}
+        {/* Card 4: Textbook References */}
         <div className="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b">
             <BookOpen className="w-4 h-4 text-emerald-600" />
