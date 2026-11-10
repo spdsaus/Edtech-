@@ -88,8 +88,15 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
     const [hours, minutes] = value.split(':').map(Number);
     return Number.isInteger(hours) && Number.isInteger(minutes) ? hours * 60 + minutes : null;
   };
-  const now = new Date();
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const southAfricaTime = new Intl.DateTimeFormat('en-ZA', {
+    timeZone: 'Africa/Johannesburg',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(new Date());
+  const currentHour = Number(southAfricaTime.find((part) => part.type === 'hour')?.value);
+  const currentMinute = Number(southAfricaTime.find((part) => part.type === 'minute')?.value);
+  const currentMinutes = currentHour * 60 + currentMinute;
   const quietStart = getMinutes(settings.quietHoursStart);
   const quietEnd = getMinutes(settings.quietHoursEnd);
   const isQuietHoursActive = Boolean(settings.enforceQuietHours && quietStart !== null && quietEnd !== null &&
@@ -151,7 +158,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
     }
   };
 
-  // Execute Simulated Send
+  // Execute Save Draft
   const handleConfirmSend = () => {
     if (eligible.length === 0) {
       showToast('warning', 'No Eligible Recipients', 'Add a guardian with recorded consent before creating a dispatch preview.');
@@ -175,10 +182,10 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
       language: selectedLanguage,
       subject: messageSubject,
       body: messageBody,
-      status: isScheduled ? 'Scheduled' : 'Draft',
+      status: 'Draft',
       sentAt: isScheduled
-        ? `Scheduled for ${scheduleOption === 'morning' ? 'Tomorrow 07:30' : customScheduleTime}`
-        : new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' }) + ' Today',
+        ? `Proposed schedule: ${scheduleOption === 'morning' ? 'Tomorrow 07:30 (South Africa time)' : customScheduleTime}`
+        : `Draft saved ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })} (South Africa time)`,
       isSimulated: true,
       excludedOptOutCount: excluded.length,
     };
@@ -187,8 +194,8 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
     setWorkflowStep('confirmed');
     showToast(
       'success',
-      isScheduled ? 'Broadcast Scheduled' : 'Simulated Dispatch Draft Created',
-      `${eligible.length} parents queued. ${excluded.length} opted-out contacts safely bypassed.`
+      'Local Draft Saved',
+      `No message was sent or scheduled. ${eligible.length} eligible and ${excluded.length} excluded contacts were counted using the locally entered consent statuses.`
     );
   };
 
@@ -215,7 +222,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
             Teacher Command Centre
           </h2>
           <p className="text-xs text-gray-500">
-            Safe South African parent communication • POPIA opt-out protection • 5 Official Languages
+            Communication workflow prototype • Local consent-status filters • 5 language options
           </p>
         </div>
 
@@ -258,9 +265,9 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
       <div className="p-3.5 rounded-xl bg-violet-50/70 border border-violet-200 text-violet-950 flex items-start gap-3 text-xs">
         <ShieldCheck className="w-5 h-5 text-violet-600 shrink-0 mt-0.5" />
         <div className="flex-1">
-          <span className="font-bold block">Local Simulated Messaging Engine</span>
+          <span className="font-bold block">Local Message Draft Preview</span>
           <span>
-            NexGen Teacher operates safely within your sandboxed environment. Real WhatsApp/SMS gateway charges and external APIs are completely bypassed. All delivery states, translations, and opt-out filters are verified locally.
+            Nothing is transmitted. Message drafts and history are stored in this browser only. Language templates are static examples that need human review. Consent status is user-entered and this prototype is not a POPIA compliance system.
           </span>
         </div>
       </div>
@@ -562,7 +569,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
                   </div>
 
                   <div className="text-[10px] text-gray-400 text-right">
-                    Delivered via {selectedChannel} Sandbox
+                    Delivery is not connected — this is a local preview
                   </div>
                 </div>
               </div>
@@ -640,7 +647,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
                           : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-100'
                       }`}
                     >
-                      Send Immediately
+                      Save as Draft
                     </button>
 
                     <button
