@@ -89,7 +89,7 @@ export const INITIAL_TEMPLATES: MessageTemplate[] = [
     translations: {
       en: {
         subject: '{SchoolName}: Parent-Teacher Consultation Evening Invitation',
-        body: 'Dear {GuardianName},\n\nYou are cordially invited to our Term 2 Parent-Teacher Academic Consultation Evening on on {MeetingDate} at {MeetingTime} in {MeetingVenue}.\n\nThis will be an opportunity to review {LearnerName}\'s term marks, workbook progress, and discuss intervention strategies ahead of the mid-year examinations.\n\nPlease confirm your attendance by replying to this notice.\n\nKind regards,\nMs. N. Dlamini (Science Department)\n{SchoolName} School',
+        body: 'Dear {GuardianName},\n\nYou are cordially invited to our Term 2 Parent-Teacher Academic Consultation Evening on {MeetingDate} at {MeetingTime} in {MeetingVenue}.\n\nThis will be an opportunity to review {LearnerName}\'s term marks, workbook progress, and discuss intervention strategies ahead of the mid-year examinations.\n\nPlease confirm your attendance by replying to this notice.\n\nKind regards,\nMs. N. Dlamini (Science Department)\n{SchoolName} School',
       },
       zu: {
         subject: '{SchoolName}: Isimemo Somhlangano Wabazali Nothisha',
@@ -101,11 +101,11 @@ export const INITIAL_TEMPLATES: MessageTemplate[] = [
       },
       af: {
         subject: '{SchoolName} Sekondêr: Ouer-Onderwyser Konsultasie Aand Uitnodiging',
-        body: 'Geagte {GuardianName},\n\nU word vriendelik uitgenooi na ons Kwartaal 2 Ouer-Onderwyser Aand op op {MeetingDate}, vanaf {MeetingTime} by {MeetingVenue}.\n\nDit bied \'n gulde geleentheid om {LearnerName} se vordering, werksboeke en doelwitte voor die middeljaareksamen te bespreek.\n\nBevestig asseblief u bywoning deur op hierdie kennisgewing te antwoord.\n\nVriendelike groete,\nMe. N. Dlamini\n{SchoolName}',
+        body: 'Geagte {GuardianName},\n\nU word vriendelik uitgenooi na ons Kwartaal 2 Ouer-Onderwyser Aand op {MeetingDate}, vanaf {MeetingTime} by {MeetingVenue}.\n\nDit bied \'n gulde geleentheid om {LearnerName} se vordering, werksboeke en doelwitte voor die middeljaareksamen te bespreek.\n\nBevestig asseblief u bywoning deur op hierdie kennisgewing te antwoord.\n\nVriendelike groete,\nMe. N. Dlamini\n{SchoolName}',
       },
       st: {
         subject: '{SchoolName}: Memo ya Kopano ya Batswadi le Matitjhere',
-        body: 'Motswadi ya Hlomphehang {GuardianName},\n\nLe mengwa ka tlhompho Kopanong ya Batswadi le Matitjhere ya Kotara ya 2 ka Labone, 28 Motsheanong 2026, ho tloha ka 16:30 ho fihlela 18:30 ka Holong ya Sekolo.\n\nLena ke monyetla wa ho hlahloba tswelopele ya {LearnerName}, dibuka tsa hae tsa mosebetsi, le ho buisana ka ditsela tsa ho mo tshehetsa pele ho dihlahlobo tsa mahareng a selemo.\n\nRe kopa le tiise haeba le tla be le le teng ka ho araba molaetsa ona.\n\nKa boikokobetso,\nMofumahatsana N. Dlamini\n{SchoolName} School',
+        body: 'Motswadi ya Hlomphehang {GuardianName},\n\nLe mengwa ka tlhompho Kopanong ya Batswadi le Matitjhere ya Kotara ya 2 ka {MeetingDate}, ho tloha ka {MeetingTime} ka {MeetingVenue}.\n\nLena ke monyetla wa ho hlahloba tswelopele ya {LearnerName}, dibuka tsa hae tsa mosebetsi, le ho buisana ka ditsela tsa ho mo tshehetsa pele ho dihlahlobo tsa mahareng a selemo.\n\nRe kopa le tiise haeba le tla be le le teng ka ho araba molaetsa ona.\n\nKa boikokobetso,\nMofumahatsana N. Dlamini\n{SchoolName} School',
       },
     },
   },
