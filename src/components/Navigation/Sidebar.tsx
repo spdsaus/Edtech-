@@ -46,7 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       id: 'planner' as ActiveTab,
       label: 'Lesson Planner',
-      subtitle: 'CAPS & AI Drafter',
+      subtitle: 'CAPS Draft Builder',
       icon: BookOpenCheck,
       badge: 'CAPS',
     },
@@ -204,7 +204,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="pt-2 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-indigo-700 text-white font-bold text-xs flex items-center justify-center ring-1 ring-white/20">
-              ND
+              {settings.teacherName ? settings.teacherName.split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase() : 'NT'}
             </div>
             <div className="text-left">
               <div className="text-xs font-semibold text-white leading-tight">Your profile</div>
