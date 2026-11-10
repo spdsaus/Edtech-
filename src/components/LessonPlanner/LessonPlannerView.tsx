@@ -56,78 +56,30 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [filterGrade, setFilterGrade] = useState('All');
 
-  // Generator & Editor Form State
+  // Blank form defaults: no example school, textbook or lesson content is prefilled.
   const [formData, setFormData] = useState<Partial<LessonPlan>>({
-    title: 'Photosynthesis & Rate Factors',
+    title: '',
     grade: '9',
-    subject: 'Natural Sciences',
-    capsStrand: 'Life and Living (Strand 1)',
-    term: 2,
-    week: 4,
+    subject: '',
+    capsStrand: '',
+    term: 1,
+    week: 1,
     date: new Date().toISOString().split('T')[0],
     periodDuration: 45,
-    assignedClass: '9A',
-    textbookReference: 'Spot On Natural Sciences Gr 9, pp. 84-89',
-    isAiGenerated: true,
+    assignedClass: '',
+    textbookReference: '',
+    isAiGenerated: false,
     reviewedByTeacher: false,
     status: 'Draft',
-    objectives: [
-      'Explain radiant energy capture by chlorophyll.',
-      'Balance chemical word equation for photosynthesis.',
-    ],
-    capsOutcomes: [
-      'CAPS Senior Phase Natural Sciences Section 3.2.',
-      'Conduct starch leaf iodine test demonstration.',
-    ],
-    introductionHook: {
-      durationMinutes: 7,
-      description: 'Display an aquatic Elodea sprig under an incandescent lamp in sodium bicarbonate solution.',
-    },
-    activities: [
-      {
-        id: 'act-new-1',
-        title: 'Direct Teaching: Chloroplast Anatomy',
-        durationMinutes: 15,
-        teacherRole: 'Explain thylakoids and chlorophyll light absorption.',
-        learnerRole: 'Sketch and label chloroplast in exercise books.',
-        activityType: 'Direct Instruction',
-      },
-      {
-        id: 'act-new-2',
-        title: 'Guided Pair Investigation: Light Distance Graphing',
-        durationMinutes: 15,
-        teacherRole: 'Supervise data graphing and rate analysis.',
-        learnerRole: 'Plot distance vs bubble rate in pairs.',
-        activityType: 'Group Work',
-      },
-    ],
-    diagnosticQuestions: [
-      {
-        bloomLevel: 'Remembering / Understanding',
-        question: 'What are the two raw materials required for photosynthesis?',
-        expectedAnswer: 'Carbon dioxide and water.',
-      },
-      {
-        bloomLevel: 'Applying / Analyzing',
-        question: 'Why do leaves boiled in ethanol decolorize?',
-        expectedAnswer: 'Ethanol dissolves green chlorophyll pigment so iodine test color change is visible.',
-      },
-    ],
-    differentiation: {
-      enrichment: 'Formulate an experiment using a potometer.',
-      scaffolding: 'Provide pre-printed graphic equations for writing support.',
-    },
-    assessmentMethod: 'Formative observation during graphing activity + exit slip.',
-    resourcesNeeded: [
-      'Spot On Natural Sciences Gr 9 textbook',
-      'Elodea sprig, beaker, lamp, sodium bicarbonate',
-      'A4 Graph sheets',
-    ],
-    conclusionSummary: {
-      durationMinutes: 8,
-      description: 'Choral recap of the photosynthesis equation. Plants respire 24/7.',
-      homeworkTask: 'Answer Exercise 4.2 questions 1-5 on page 89.',
-    },
+    objectives: [],
+    capsOutcomes: [],
+    introductionHook: { durationMinutes: 5, description: '' },
+    activities: [],
+    diagnosticQuestions: [],
+    differentiation: { enrichment: '', scaffolding: '' },
+    assessmentMethod: '',
+    resourcesNeeded: [],
+    conclusionSummary: { durationMinutes: 5, description: '', homeworkTask: '' },
   });
 
   // Calculate timing balance
@@ -154,62 +106,30 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
 
   const handleStartCreate = () => {
     setFormData({
-      title: 'Chemical Reactions & Energy',
+      title: '',
       grade: '9',
-      subject: 'Natural Sciences',
-      capsStrand: 'Matter and Materials',
-      term: 2,
-      week: 5,
+      subject: '',
+      capsStrand: '',
+      term: 1,
+      week: 1,
       date: new Date().toISOString().split('T')[0],
       periodDuration: 45,
-      assignedClass: '9A',
-      textbookReference: 'Spot On Natural Sciences Gr 9, pp. 92-96',
-      isAiGenerated: true,
+      assignedClass: '',
+      textbookReference: '',
+      isAiGenerated: false,
       reviewedByTeacher: false,
       status: 'Draft',
-      objectives: ['Identify exothermic vs endothermic reactions in test tubes.'],
-      capsOutcomes: ['CAPS Matter & Materials Section 2.1.'],
-      introductionHook: {
-        durationMinutes: 7,
-        description: 'Drop zinc granule into dilute hydrochloric acid; measure temperature rise with lab thermometer.',
-      },
-      activities: [
-        {
-          id: 'act-init-1',
-          title: 'Direct Explanation: Chemical Bonds & Energy Release',
-          durationMinutes: 15,
-          teacherRole: 'Define bond-breaking and bond-forming energies.',
-          learnerRole: 'Record definitions and sketch energy level diagram.',
-          activityType: 'Direct Instruction',
-        },
-        {
-          id: 'act-init-2',
-          title: 'Hands-on Temperature Measurement Experiment',
-          durationMinutes: 15,
-          teacherRole: 'Distribute thermometers and baking soda / citric acid solution.',
-          learnerRole: 'Record initial vs final temp in groups of 3.',
-          activityType: 'Practical / Experiment',
-        },
-      ],
-      diagnosticQuestions: [
-        {
-          bloomLevel: 'Remembering / Understanding',
-          question: 'Define an exothermic reaction.',
-          expectedAnswer: 'A reaction that releases thermal energy to its surroundings.',
-        },
-      ],
-      differentiation: {
-        enrichment: 'Calculate temperature differential delta-T.',
-        scaffolding: 'Provide step-by-step thermometer reading guide.',
-      },
-      assessmentMethod: 'Lab checklist and summary table review.',
-      resourcesNeeded: ['Citric acid, baking soda, water, thermometers, beakers'],
-      conclusionSummary: {
-        durationMinutes: 8,
-        description: 'Recap difference between hot and cold reactions.',
-        homeworkTask: 'Summarize 2 domestic examples of exothermic reactions.',
-      },
+      objectives: [],
+      capsOutcomes: [],
+      introductionHook: { durationMinutes: 5, description: '' },
+      activities: [],
+      diagnosticQuestions: [],
+      differentiation: { enrichment: '', scaffolding: '' },
+      assessmentMethod: '',
+      resourcesNeeded: [],
+      conclusionSummary: { durationMinutes: 5, description: '', homeworkTask: '' },
     });
+    setSelectedPlan(null);
     setIsCreatingNew(true);
     setIsEditing(true);
   };
@@ -243,7 +163,7 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
       );
 
       setFormData(generated);
-      showToast('success', 'AI Lesson Draft Synthesized', 'Timing mathematically balanced. Please review and sign off.');
+      showToast('info', 'Sample Draft Created', 'This is a template-based simulation, not a live AI result. Review all content and CAPS references.');
     } catch (err) {
       showToast('error', 'Generation Error', 'Failed to generate lesson draft.');
     } finally {
@@ -381,7 +301,7 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
             CAPS Lesson Planning & Verification
           </h2>
           <p className="text-xs text-gray-500">
-            Curriculum and Assessment Policy Statement (CAPS) • Term 2 Pacing Standard
+            CAPS lesson drafts • Configure grade, term and topic for each plan
           </p>
         </div>
 
@@ -398,10 +318,10 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
             <button
               onClick={handlePrint}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#171936] hover:bg-gray-50 text-xs font-semibold transition-colors shadow-xs"
-              title="Print official CAPS format for HOD file"
+              title="Print this lesson plan for review"
             >
               <Printer className="w-4 h-4 text-[#5145C5]" />
-              <span>Print HOD Copy</span>
+              <span>Print Lesson Plan</span>
             </button>
           )}
         </div>
@@ -417,7 +337,7 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
                 Saved Repository ({lessonPlans.length})
               </span>
               <span className="text-[11px] text-[#5145C5] font-semibold">
-                Thandeka Secondary
+                Your school
               </span>
             </div>
 
@@ -536,7 +456,7 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
                     className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-[#5145C5] to-[#7162E8] text-white text-xs font-bold hover:opacity-95 transition-all shadow-sm disabled:opacity-50"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                    <span>{isGeneratingAi ? 'Synthesizing...' : 'Simulate AI Draft'}</span>
+                    <span>{isGeneratingAi ? 'Synthesizing...' : 'Generate Sample Draft'}</span>
                   </button>
 
                   <button
@@ -916,9 +836,9 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
                     onChange={(e) => setFormData({ ...formData, reviewedByTeacher: e.target.checked })}
                     className="w-4 h-4 rounded text-[#5145C5] focus:ring-[#5145C5]"
                   />
-                  <span>Mark as "Teacher Reviewed & Approved for CAPS delivery"</span>
+                  <span>Mark as reviewed by the teacher</span>
                 </label>
-                <span className="text-[11px] text-gray-500">Sign-off: Ms. N. Dlamini</span>
+                <span className="text-[11px] text-gray-500">Teacher review</span>
               </div>
             </div>
           ) : selectedPlan ? (
@@ -939,7 +859,7 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
                       const updated = { ...selectedPlan, reviewedByTeacher: true, status: 'Approved' as const };
                       onSavePlan(updated);
                       setSelectedPlan(updated);
-                      showToast('success', 'Sign-Off Recorded', 'Lesson marked as reviewed by Ms. Dlamini.');
+                      showToast('success', 'Review Recorded', 'Your review marker has been saved locally. Verify CAPS alignment independently.');
                     }}
                     className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shrink-0"
                   >
@@ -950,10 +870,10 @@ export const LessonPlannerView: React.FC<LessonPlannerViewProps> = ({
                 <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-center justify-between text-xs no-print">
                   <div className="flex items-center gap-2 font-semibold">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>Teacher Reviewed & Approved by Ms. N. Dlamini for CAPS Compliance</span>
+                    <span>Marked as teacher-reviewed — verify CAPS alignment independently</span>
                   </div>
                   <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">
-                    Official Teaching Document
+                    Teacher-reviewed draft
                   </span>
                 </div>
               )}
