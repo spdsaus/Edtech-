@@ -56,15 +56,15 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
 
   // Form State for Add / Edit Learner
   const [formData, setFormData] = useState<Partial<Learner>>({
-    learnerNumber: 'TSS-2026-089',
+    learnerNumber: '',
     firstName: '',
     lastName: '',
     gender: 'Female',
     grade: '9',
     classSection: '9A',
-    dateOfBirth: '2011-05-10',
+    dateOfBirth: '',
     guardianName: '',
-    guardianPhone: '+27 82 000 0000',
+    guardianPhone: '',
     guardianEmail: '',
     guardianRelationship: 'Mother',
     homeLanguage: 'zu',
@@ -76,15 +76,15 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   const handleOpenAdd = () => {
     setEditingLearner(null);
     setFormData({
-      learnerNumber: `TSS-2026-${String(learners.length + 1).padStart(3, '0')}`,
+      learnerNumber: '',
       firstName: '',
       lastName: '',
       gender: 'Female',
       grade: selectedClassTab === 'All' ? '9' : selectedClassTab.replace(/[^\d]/g, ''),
       classSection: selectedClassTab === 'All' ? '9A' : selectedClassTab,
-      dateOfBirth: '2011-05-10',
+      dateOfBirth: '',
       guardianName: '',
-      guardianPhone: '+27 82 ',
+      guardianPhone: '',
       guardianEmail: '',
       guardianRelationship: 'Mother',
       homeLanguage: 'zu',
@@ -152,7 +152,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   const sampleCsvData = 'LearnerNumber,FirstName,LastName,Gender,Grade,Class,GuardianName,Relationship,Phone,Email,Language';
 
   const handleLoadSampleCsv = () => {
-    setCsvRawText(sampleCsvData);\n    showToast('info', 'CSV Header Loaded', 'Add your own rows. No sample learner records are included.');
+    setCsvRawText(sampleCsvData);\n    showToast('info', 'CSV Header Loaded', 'Add your own rows. No sample learner records are included.');\n    showToast('info', 'CSV Header Loaded', 'Add your own rows. No sample learner records are included.');
   };
 
   const handleParseCsv = () => {
@@ -207,7 +207,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
         guardianPhone: phone,
         guardianEmail: values[emIdx >= 0 ? emIdx : 9] || '',
         homeLanguage: (values[lgIdx >= 0 ? lgIdx : 10] as LanguageCode) || 'zu',
-        consentStatus: 'opted-in',
+        consentStatus: 'pending',
       };
 
       return {
@@ -374,7 +374,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
               {filteredLearners.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-xs text-gray-400">
-                    No learners found matching criteria.
+                    No learner records yet. Add a learner or import your own CSV to get started.
                   </td>
                 </tr>
               ) : (
