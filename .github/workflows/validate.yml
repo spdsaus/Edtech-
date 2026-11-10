@@ -1,0 +1,36 @@
+name: Prototype build checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, mvp-readiness-cleanup]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            npm install --no-audit --no-fund
+          fi
+      - name: TypeScript check
+        run: npm run lint
+      - name: Production build
+        run: npm run build
+      - name: GitHub Pages path build
+        run: npm run build
+        env:
+          GITHUB_PAGES: 'true'

@@ -61,30 +61,48 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
 
   // Form State
   const [recipientType, setRecipientType] = useState<'Class' | 'Group' | 'Individual'>('Class');
-  const [selectedClass, setSelectedClass] = useState<string>('9A');
+  const [selectedClass, setSelectedClass] = useState<string>('');
   const [selectedIndividualParentId, setSelectedIndividualParentId] = useState<string>('');
   const [selectedChannel, setSelectedChannel] = useState<ChannelType>('WhatsApp');
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageCode>('en');
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0]?.id || '');
 
   // Editable message contents
   const [messageSubject, setMessageSubject] = useState<string>(
-    templates[0].translations.en.subject
+    templates[0]?.translations.en.subject || ''
   );
   const [messageBody, setMessageBody] = useState<string>(
-    templates[0].translations.en.body
+    templates[0]?.translations.en.body || ''
   );
 
   // Scheduling options
   const [scheduleOption, setScheduleOption] = useState<'now' | 'morning' | 'custom'>('now');
-  const [customScheduleTime, setCustomScheduleTime] = useState<string>('2026-05-19 07:30');
+  const [customScheduleTime, setCustomScheduleTime] = useState<string>('');
 
   // Directory filter states
   const [directoryClassFilter, setDirectoryClassFilter] = useState<string>('All');
   const [directorySearch, setDirectorySearch] = useState<string>('');
 
-  // Check Quiet Hours status (Simulated check against 18:00 - 06:30)
-  const isQuietHoursActive = true; // Flagged active for demonstration of South African educator safety rules
+  // Check configured school quiet hours using South African local time.
+  const getMinutes = (value: string) => {
+    const [hours, minutes] = value.split(':').map(Number);
+    return Number.isInteger(hours) && Number.isInteger(minutes) ? hours * 60 + minutes : null;
+  };
+  const southAfricaTime = new Intl.DateTimeFormat('en-ZA', {
+    timeZone: 'Africa/Johannesburg',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(new Date());
+  const currentHour = Number(southAfricaTime.find((part) => part.type === 'hour')?.value);
+  const currentMinute = Number(southAfricaTime.find((part) => part.type === 'minute')?.value);
+  const currentMinutes = currentHour * 60 + currentMinute;
+  const quietStart = getMinutes(settings.quietHoursStart);
+  const quietEnd = getMinutes(settings.quietHoursEnd);
+  const isQuietHoursActive = Boolean(settings.enforceQuietHours && quietStart !== null && quietEnd !== null &&
+    (quietStart <= quietEnd
+      ? currentMinutes >= quietStart && currentMinutes < quietEnd
+      : currentMinutes >= quietStart || currentMinutes < quietEnd));
 
   // Recipient computation & Opt-out filtering
   const getRecipients = () => {
@@ -93,7 +111,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
       const eligible = classParents.filter((p) => p.consentStatus === 'opted-in');
       const excluded = classParents.filter((p) => p.consentStatus !== 'opted-in');
       return {
-        targetName: `Grade ${selectedClass} Guardians (${eligible.length} eligible)`,
+        targetName: `Grade ${selectedClass || '—'} Guardians (${eligible.length} eligible)`,
         eligible,
         excluded,
       };
@@ -106,7 +124,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
         excluded,
       };
     } else {
-      const parent = parents.find((p) => p.id === selectedIndividualParentId) || parents[0];
+      const parent = parents.find((p) => p.id === selectedIndividualParentId);
       const isEligible = parent?.consentStatus === 'opted-in';
       return {
         targetName: `${parent?.guardianName} (${parent?.learnerName})`,
@@ -140,9 +158,17 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
     }
   };
 
-  // Execute Simulated Send
+  // Execute Save Draft
   const handleConfirmSend = () => {
-    const isScheduled = scheduleOption !== 'now';
+    if (eligible.length === 0) {
+      showToast('warning', 'No Eligible Recipients', 'Add a guardian and record their consent before saving a recipient-specific draft.');
+      return;
+    }
+    if (scheduleOption === 'custom' && (!customScheduleTime || new Date(customScheduleTime).getTime() <= Date.now())) {
+      showToast('error', 'Invalid Schedule', 'Choose a future date and time.');
+      return;
+    }
+    const hasProposedSchedule = scheduleOption !== 'now';
     const newLog: MessageLog = {
       id: `msg-${Date.now()}`,
       recipientType,
@@ -152,10 +178,10 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
       language: selectedLanguage,
       subject: messageSubject,
       body: messageBody,
-      status: isScheduled ? 'Scheduled' : 'Sent',
-      sentAt: isScheduled
-        ? `Scheduled for ${scheduleOption === 'morning' ? 'Tomorrow 07:30' : customScheduleTime}`
-        : new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' }) + ' Today',
+      status: 'Draft',
+      sentAt: hasProposedSchedule
+        ? `Proposed schedule: ${scheduleOption === 'morning' ? 'Tomorrow 07:30 (South Africa time)' : customScheduleTime}`
+        : `Draft saved ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })} (South Africa time)`,
       isSimulated: true,
       excludedOptOutCount: excluded.length,
     };
@@ -164,8 +190,8 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
     setWorkflowStep('confirmed');
     showToast(
       'success',
-      isScheduled ? 'Broadcast Scheduled' : 'Simulated Message Dispatched',
-      `${eligible.length} parents queued. ${excluded.length} opted-out contacts safely bypassed.`
+      'Local Draft Saved',
+      `No message was sent or scheduled. ${eligible.length} eligible and ${excluded.length} excluded contacts were counted using the locally entered consent statuses.`
     );
   };
 
@@ -192,7 +218,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
             Teacher Command Centre
           </h2>
           <p className="text-xs text-gray-500">
-            Safe South African parent communication • POPIA opt-out protection • 5 Official Languages
+            Communication workflow prototype • Local consent-status filters • 5 language options
           </p>
         </div>
 
@@ -235,9 +261,9 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
       <div className="p-3.5 rounded-xl bg-violet-50/70 border border-violet-200 text-violet-950 flex items-start gap-3 text-xs">
         <ShieldCheck className="w-5 h-5 text-violet-600 shrink-0 mt-0.5" />
         <div className="flex-1">
-          <span className="font-bold block">Local Simulated Messaging Engine</span>
+          <span className="font-bold block">Local Message Draft Preview</span>
           <span>
-            NexGen Teacher operates safely within your sandboxed environment. Real WhatsApp/SMS gateway charges and external APIs are completely bypassed. All delivery states, translations, and opt-out filters are verified locally.
+            Nothing is transmitted. Message drafts and history are stored in this browser only. Language templates are static examples that need human review. Consent status is user-entered and this prototype is not a POPIA compliance system.
           </span>
         </div>
       </div>
@@ -290,12 +316,12 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
                     School Quiet Hours Enforced ({settings.quietHoursStart} – {settings.quietHoursEnd})
                   </strong>
                   <span className="text-[#C5C8E5]">
-                    Thandeka Secondary policy prevents outbound messaging during evening family hours.
+                    Configured school quiet hours prevent immediate dispatch during this period.
                   </span>
                 </div>
               </div>
               <span className="text-[10px] bg-indigo-800 text-indigo-200 font-bold px-2 py-1 rounded-md">
-                Auto-Schedule Active
+                Scheduling Required
               </span>
             </div>
           )}
@@ -526,7 +552,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
                   <div className="flex items-center justify-between border-b pb-2 text-[11px] text-gray-500">
                     <div className="flex items-center gap-1.5 font-bold text-[#171936]">
                       <Radio className="w-3.5 h-3.5 text-[#5145C5]" />
-                      <span>Thandeka Secondary • {selectedChannel}</span>
+                      <span>{settings.schoolName || 'Your school'} • {selectedChannel}</span>
                     </div>
                     <span>Language: {selectedLanguage.toUpperCase()}</span>
                   </div>
@@ -539,7 +565,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
                   </div>
 
                   <div className="text-[10px] text-gray-400 text-right">
-                    Delivered via {selectedChannel} Sandbox
+                    Delivery is not connected — this is a local preview
                   </div>
                 </div>
               </div>
@@ -617,7 +643,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
                           : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-100'
                       }`}
                     >
-                      Send Immediately
+                      Save as Draft
                     </button>
 
                     <button

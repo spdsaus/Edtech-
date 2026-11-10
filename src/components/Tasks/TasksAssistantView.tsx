@@ -149,7 +149,7 @@ export const TasksAssistantView: React.FC<TasksAssistantViewProps> = ({
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-amber-500" />
             <span className="text-xs font-bold uppercase tracking-wider text-[#171936]">
-              Educator AI Briefings
+              Briefing Previews
             </span>
           </div>
 
@@ -196,23 +196,23 @@ export const TasksAssistantView: React.FC<TasksAssistantViewProps> = ({
         {activeAssistantWidget === 'morning' && (
           <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200 text-amber-950 space-y-2 text-xs">
             <div className="flex items-center justify-between font-bold">
-              <span className="text-amber-900">Morning Briefing • Day 18 Term 2</span>
+              <span className="text-amber-900">Morning Briefing • Prototype</span>
               <span className="text-[10px] bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded-full">
-                07:45 Assembly Completed
+                Live timetable not connected
               </span>
             </div>
             <p className="text-gray-700 leading-relaxed">
-              Ms. Dlamini, today's schedule includes 4 instructional periods. <strong>Period 3 (09:45)</strong> in Biology Lab 2 requires onion root tip slides and microscopes. Grade 9A exit tickets from Friday are queued for review during Period 6.
+              This preview does not read a live timetable yet. Add your own tasks below to organise the work you need to complete.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
               <div className="bg-white/80 p-2 rounded-lg border border-amber-200 font-medium">
-                • 4 Teaching Periods
+                • {tasks.filter((t) => ['Pending', 'In progress', 'Suggested'].includes(t.status)).length} Open Tasks
               </div>
               <div className="bg-white/80 p-2 rounded-lg border border-amber-200 font-medium">
-                • 1 Lab Setup Action
+                • {tasks.filter((t) => t.priority === 'Urgent' && t.status !== 'Completed').length} Urgent Tasks
               </div>
               <div className="bg-white/80 p-2 rounded-lg border border-amber-200 font-medium">
-                • Quiet hours begin 18:00
+                • Local task list only
               </div>
             </div>
           </div>
@@ -224,17 +224,17 @@ export const TasksAssistantView: React.FC<TasksAssistantViewProps> = ({
             <div className="flex items-center justify-between font-bold">
               <span className="text-indigo-900">Between-Lesson Prompts & Transit Alerts</span>
               <span className="text-[10px] bg-indigo-200/80 text-indigo-900 px-2 py-0.5 rounded-full">
-                Period 2 Free Prep Active
+                Live timetable not connected
               </span>
             </div>
             <ul className="space-y-1.5 text-gray-700">
               <li className="flex items-start gap-2">
                 <span className="text-indigo-600 font-bold">•</span>
-                <span><strong>Prep for Period 3 (09:45):</strong> Biology Lab 2 microscopes need coarse focus calibration before learners arrive.</span>
+                <span>Automated period reminders are not connected in this prototype.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-indigo-600 font-bold">•</span>
-                <span><strong>Transit Notice:</strong> Ensure Grade 9A learners return their practical iodine beakers to the drying rack before dismissal.</span>
+                <span>Add a task manually to track lesson preparation, marking or follow-up.</span>
               </li>
             </ul>
           </div>
@@ -246,11 +246,11 @@ export const TasksAssistantView: React.FC<TasksAssistantViewProps> = ({
             <div className="flex items-center justify-between font-bold">
               <span className="text-purple-900">End-of-Day Wrap-Up Protocol</span>
               <span className="text-[10px] bg-purple-200/80 text-purple-900 px-2 py-0.5 rounded-full">
-                Quiet Hours Safeguard
+                Local Summary
               </span>
             </div>
             <p className="text-gray-700 leading-relaxed">
-              Great work today, Ms. Dlamini. You have <strong>{tasks.filter((t) => t.status === 'Completed').length} tasks completed</strong>. Remember that Thandeka Secondary quiet hours commence at 18:00; any remaining parent notifications will automatically schedule for 07:30 tomorrow.
+              You have <strong>{tasks.filter((t) => t.status === 'Completed').length} tasks completed</strong>. Parent messages are local drafts only; this prototype does not send or automatically schedule them.
             </p>
           </div>
         )}

@@ -54,7 +54,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       textbooks: [...prev.textbooks, newTextbook.trim()],
     }));
     setNewTextbook('');
-    showToast('info', 'Textbook Added', 'CAPS approved material registered.');
+    showToast('info', 'Textbook Added', 'Reference added. Verify curriculum alignment and textbook details independently.');
   };
 
   const handleRemoveTextbook = (index: number) => {
@@ -68,11 +68,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     const updated = {
       ...formData,
       pendingSyncCount: 0,
-      lastSyncedAt: new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' (Manual Sync)',
+      lastSyncedAt: 'Local device storage only — cloud sync is not connected',
     };
     setFormData(updated);
     onSaveSettings(updated);
-    showToast('success', 'Cache Synced', 'All local records successfully verified and synced.');
+    showToast('info', 'Local Counter Cleared', 'This only clears the prototype counter. No cloud sync is performed.');
   };
 
   return (
@@ -140,7 +140,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 </span>
               </div>
               <p className="text-xs text-gray-600 mt-0.5">
-                Last sync timestamp: <strong className="text-gray-900">{formData.lastSyncedAt}</strong>
+                Local storage status: <strong className="text-gray-900">{formData.lastSyncedAt}</strong>
                 {formData.pendingSyncCount > 0 && (
                   <span className="text-amber-800 font-semibold ml-2">
                     • {formData.pendingSyncCount} changes queued locally
@@ -168,7 +168,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               onClick={handleForceSync}
               className="px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold transition-colors"
             >
-              Force Sync Now
+              Clear Pending Counter
             </button>
           </div>
         </div>
@@ -284,7 +284,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         <div className="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b">
             <Moon className="w-4 h-4 text-purple-600" />
-            <h3 className="text-sm font-bold text-[#171936]">Quiet Hours & POPIA Policy</h3>
+            <h3 className="text-sm font-bold text-[#171936]">Quiet Hours & Consent Preferences</h3>
           </div>
 
           <div className="space-y-3">
@@ -354,7 +354,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </div>
 
-        {/* Card 4: Approved CAPS Textbooks */}
+        {/* Card 4: Textbook References */}
         <div className="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b">
             <BookOpen className="w-4 h-4 text-emerald-600" />
@@ -405,18 +405,18 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         <div>
           <h4 className="text-sm font-bold text-red-950 flex items-center gap-2">
             <RotateCcw className="w-4 h-4 text-red-600" />
-            <span>Reset Demo Data to Initial Thandeka Secondary State</span>
+            <span>Clear Local Prototype Data</span>
           </h4>
           <p className="text-xs text-red-800/80 mt-0.5">
-            Restores all 12 fictional learners, parent contacts, lesson plans, and timetable back to default clean values.
+            Removes records stored in this browser. This does not affect any cloud account.
           </p>
         </div>
 
         <button
           onClick={() => {
-            if (confirm('Reset all application data back to initial Thandeka Secondary demo state? This cannot be undone.')) {
+            if (confirm('Clear all locally stored prototype records? This cannot be undone.')) {
               onResetDemoData();
-              showToast('info', 'Demo Data Restored', 'All records returned to pristine demo state.');
+              showToast('info', 'Workspace Cleared', 'All local records have been cleared.');
             }
           }}
           className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-colors shadow-xs shrink-0"

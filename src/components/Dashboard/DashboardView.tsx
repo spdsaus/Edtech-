@@ -56,7 +56,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   const pendingTasks = tasks.filter((t) => t.status === 'Pending' || t.status === 'In progress' || t.status === 'Suggested');
   const todayClasses = timetable.filter((p) => p.gradeClass.startsWith('Grade'));
-  const currentPeriod = timetable.find((p) => p.status === 'Current') || timetable[2];
+  const currentPeriod = timetable.find((p) => p.status === 'Current');
 
   const currentDateFormatted = new Date().toLocaleDateString('en-ZA', {
     weekday: 'long',
@@ -83,12 +83,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
 
             <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white">
-              Ready for Day 18 of Term 2?
+              Your teaching workspace
             </h2>
 
             <p className="text-sm text-[#C5C8E5] leading-relaxed">
-              You have <strong className="text-white font-semibold">{todayClasses.length} teaching periods</strong> scheduled today. 
-              Biology Lab 2 microscopes are prepped for Grade 10B, and your Grade 9A CAPS lesson plan is verified.
+              Your dashboard will reflect your classes, lesson plans, tasks and communications as you add your own information.
             </p>
           </div>
 
@@ -118,7 +117,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="text-xs font-medium text-gray-500">Today's Classes</div>
             <div className="text-2xl font-bold text-[#171936] mt-1">{todayClasses.length} Periods</div>
-            <div className="text-[11px] text-emerald-600 font-medium mt-0.5">2 Completed, 1 Current</div>
+            <div className="text-[11px] text-gray-500 font-medium mt-0.5">From your timetable</div>
           </div>
           <div className="w-10 h-10 rounded-xl bg-[#F0EEFF] text-[#5145C5] flex items-center justify-center">
             <Clock className="w-5 h-5" />
@@ -129,7 +128,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="text-xs font-medium text-gray-500">CAPS Lesson Plans</div>
             <div className="text-2xl font-bold text-[#171936] mt-1">{lessonPlans.length} Ready</div>
-            <div className="text-[11px] text-indigo-600 font-medium mt-0.5">100% Timing Balanced</div>
+            <div className="text-[11px] text-gray-500 font-medium mt-0.5">Saved in this browser</div>
           </div>
           <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
             <BookOpenCheck className="w-5 h-5" />
@@ -140,7 +139,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="text-xs font-medium text-gray-500">Open Tasks</div>
             <div className="text-2xl font-bold text-[#171936] mt-1">{pendingTasks.length} Pending</div>
-            <div className="text-[11px] text-amber-600 font-medium mt-0.5">1 Urgent Lab Prep</div>
+            <div className="text-[11px] text-gray-500 font-medium mt-0.5">From your task list</div>
           </div>
           <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
             <CheckSquare className="w-5 h-5" />
@@ -150,8 +149,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="bg-white p-4 rounded-xl border border-gray-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex items-center justify-between">
           <div>
             <div className="text-xs font-medium text-gray-500">Parent Comms</div>
-            <div className="text-2xl font-bold text-[#171936] mt-1">61 Parents</div>
-            <div className="text-[11px] text-purple-600 font-medium mt-0.5">5 Languages Available</div>
+            <div className="text-2xl font-bold text-[#171936] mt-1">{messageLogs.reduce((total, log) => total + log.recipientCount, 0)} Recipients</div>
+            <div className="text-[11px] text-purple-600 font-medium mt-0.5">5 language options</div>
           </div>
           <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
             <Radio className="w-5 h-5" />
@@ -451,33 +450,33 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <div className="space-y-3 text-sm text-gray-700">
               <div className="p-3 bg-[#F0EEFF] rounded-xl text-[#171936] border border-[#5145C5]/20">
                 <div className="font-bold text-xs uppercase tracking-wider text-[#5145C5]">
-                  Daily Overview for Ms. Dlamini
+                  Your Daily Overview
                 </div>
                 <p className="text-xs mt-1 leading-relaxed">
-                  Today is focused on <strong>Photosynthesis in Grade 9A/9B</strong> and <strong>Mitosis practical microscope investigations in Grade 10B (Period 3)</strong>.
+                  Your schedule and priority tasks will appear here once you add them.
                 </p>
               </div>
 
               <div className="space-y-2">
-                <div className="text-xs font-bold text-gray-500 uppercase">3 Urgent Action Items</div>
+                <div className="text-xs font-bold text-gray-500 uppercase">Priority actions</div>
                 <ul className="space-y-1.5 text-xs">
                   <li className="flex items-start gap-2">
                     <span className="text-amber-500 font-bold">1.</span>
-                    <span>Check 7 optical microscopes and onion root tip slides in Biology Lab 2 before 09:45.</span>
+                    <span>Add tasks to see priority actions here.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-indigo-500 font-bold">2.</span>
-                    <span>Grade 9A exit tickets need scoring during period 6 free admin period.</span>
+                    <span>Your upcoming tasks will appear in this briefing.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-emerald-500 font-bold">3.</span>
-                    <span>POPIA Safeguard: Kagiso Modise (10B) parent is opted out of broadcasts; communicate via term report only.</span>
+                    <span>Consent and communication status will be shown for your own contacts.</span>
                   </li>
                 </ul>
               </div>
 
               <div className="p-3 bg-gray-50 rounded-xl text-xs text-gray-600 border border-gray-200">
-                <strong>Quiet Hours Notice:</strong> Today's quiet hours will begin promptly at 18:00. Any parent notices drafted after 18:00 should be scheduled for tomorrow 07:30.
+                <strong>Quiet Hours Notice:</strong> Quiet hours use the schedule configured in Settings. Messaging is simulated in this prototype.
               </div>
             </div>
 

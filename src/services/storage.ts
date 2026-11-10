@@ -9,28 +9,18 @@ import {
   TeacherSettings,
   TimetablePeriod,
 } from '../types';
-import {
-  INITIAL_CLASSES,
-  INITIAL_LEARNERS,
-  INITIAL_PARENTS,
-  INITIAL_LESSON_PLANS,
-  INITIAL_TEMPLATES,
-  INITIAL_MESSAGE_LOGS,
-  INITIAL_TASKS,
-  INITIAL_SETTINGS,
-  TODAY_TIMETABLE,
-} from '../data/initialData';
+import { INITIAL_TEMPLATES, INITIAL_SETTINGS } from '../data/initialData';
 
 const STORAGE_KEYS = {
-  CLASSES: 'nexgen_classes_v1',
-  LEARNERS: 'nexgen_learners_v1',
-  PARENTS: 'nexgen_parents_v1',
-  LESSON_PLANS: 'nexgen_lesson_plans_v1',
-  TEMPLATES: 'nexgen_templates_v1',
-  MESSAGE_LOGS: 'nexgen_message_logs_v1',
-  TASKS: 'nexgen_tasks_v1',
-  SETTINGS: 'nexgen_settings_v1',
-  TIMETABLE: 'nexgen_timetable_v1',
+  CLASSES: 'nexgen_classes_v2',
+  LEARNERS: 'nexgen_learners_v2',
+  PARENTS: 'nexgen_parents_v2',
+  LESSON_PLANS: 'nexgen_lesson_plans_v2',
+  TEMPLATES: 'nexgen_templates_v2',
+  MESSAGE_LOGS: 'nexgen_message_logs_v2',
+  TASKS: 'nexgen_tasks_v2',
+  SETTINGS: 'nexgen_settings_v2',
+  TIMETABLE: 'nexgen_timetable_v2',
 };
 
 function safeGet<T>(key: string, fallback: T): T {
@@ -54,28 +44,28 @@ function safeSet<T>(key: string, value: T): void {
 
 export const StorageService = {
   getClasses(): ClassGroup[] {
-    return safeGet<ClassGroup[]>(STORAGE_KEYS.CLASSES, INITIAL_CLASSES);
+    return safeGet<ClassGroup[]>(STORAGE_KEYS.CLASSES, []);
   },
   saveClasses(classes: ClassGroup[]): void {
     safeSet(STORAGE_KEYS.CLASSES, classes);
   },
 
   getLearners(): Learner[] {
-    return safeGet<Learner[]>(STORAGE_KEYS.LEARNERS, INITIAL_LEARNERS);
+    return safeGet<Learner[]>(STORAGE_KEYS.LEARNERS, []);
   },
   saveLearners(learners: Learner[]): void {
     safeSet(STORAGE_KEYS.LEARNERS, learners);
   },
 
   getParents(): ParentContact[] {
-    return safeGet<ParentContact[]>(STORAGE_KEYS.PARENTS, INITIAL_PARENTS);
+    return safeGet<ParentContact[]>(STORAGE_KEYS.PARENTS, []);
   },
   saveParents(parents: ParentContact[]): void {
     safeSet(STORAGE_KEYS.PARENTS, parents);
   },
 
   getLessonPlans(): LessonPlan[] {
-    return safeGet<LessonPlan[]>(STORAGE_KEYS.LESSON_PLANS, INITIAL_LESSON_PLANS);
+    return safeGet<LessonPlan[]>(STORAGE_KEYS.LESSON_PLANS, []);
   },
   saveLessonPlans(plans: LessonPlan[]): void {
     safeSet(STORAGE_KEYS.LESSON_PLANS, plans);
@@ -89,14 +79,14 @@ export const StorageService = {
   },
 
   getMessageLogs(): MessageLog[] {
-    return safeGet<MessageLog[]>(STORAGE_KEYS.MESSAGE_LOGS, INITIAL_MESSAGE_LOGS);
+    return safeGet<MessageLog[]>(STORAGE_KEYS.MESSAGE_LOGS, []);
   },
   saveMessageLogs(logs: MessageLog[]): void {
     safeSet(STORAGE_KEYS.MESSAGE_LOGS, logs);
   },
 
   getTasks(): TeacherTask[] {
-    return safeGet<TeacherTask[]>(STORAGE_KEYS.TASKS, INITIAL_TASKS);
+    return safeGet<TeacherTask[]>(STORAGE_KEYS.TASKS, []);
   },
   saveTasks(tasks: TeacherTask[]): void {
     safeSet(STORAGE_KEYS.TASKS, tasks);
@@ -110,7 +100,7 @@ export const StorageService = {
   },
 
   getTimetable(): TimetablePeriod[] {
-    return safeGet<TimetablePeriod[]>(STORAGE_KEYS.TIMETABLE, TODAY_TIMETABLE);
+    return safeGet<TimetablePeriod[]>(STORAGE_KEYS.TIMETABLE, []);
   },
   saveTimetable(timetable: TimetablePeriod[]): void {
     safeSet(STORAGE_KEYS.TIMETABLE, timetable);
@@ -127,14 +117,14 @@ export const StorageService = {
     localStorage.removeItem(STORAGE_KEYS.SETTINGS);
     localStorage.removeItem(STORAGE_KEYS.TIMETABLE);
 
-    safeSet(STORAGE_KEYS.CLASSES, INITIAL_CLASSES);
-    safeSet(STORAGE_KEYS.LEARNERS, INITIAL_LEARNERS);
-    safeSet(STORAGE_KEYS.PARENTS, INITIAL_PARENTS);
-    safeSet(STORAGE_KEYS.LESSON_PLANS, INITIAL_LESSON_PLANS);
+    safeSet(STORAGE_KEYS.CLASSES, []);
+    safeSet(STORAGE_KEYS.LEARNERS, []);
+    safeSet(STORAGE_KEYS.PARENTS, []);
+    safeSet(STORAGE_KEYS.LESSON_PLANS, []);
     safeSet(STORAGE_KEYS.TEMPLATES, INITIAL_TEMPLATES);
-    safeSet(STORAGE_KEYS.MESSAGE_LOGS, INITIAL_MESSAGE_LOGS);
-    safeSet(STORAGE_KEYS.TASKS, INITIAL_TASKS);
+    safeSet(STORAGE_KEYS.MESSAGE_LOGS, []);
+    safeSet(STORAGE_KEYS.TASKS, []);
     safeSet(STORAGE_KEYS.SETTINGS, INITIAL_SETTINGS);
-    safeSet(STORAGE_KEYS.TIMETABLE, TODAY_TIMETABLE);
+    safeSet(STORAGE_KEYS.TIMETABLE, []);
   },
 };

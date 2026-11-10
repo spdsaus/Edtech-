@@ -29,6 +29,7 @@ interface MyClassesViewProps {
   onUpdateLearner: (learner: Learner) => void;
   onDeleteLearner: (learnerId: string) => void;
   onBatchImportLearners: (newLearners: Learner[]) => void;
+  onAddClass: (classGroup: ClassGroup) => void;
 }
 
 export const MyClassesView: React.FC<MyClassesViewProps> = ({
@@ -38,6 +39,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   onUpdateLearner,
   onDeleteLearner,
   onBatchImportLearners,
+  onAddClass,
 }) => {
   const { showToast } = useToast();
 
@@ -48,6 +50,8 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   const [showAddEditModal, setShowAddEditModal] = useState<boolean>(false);
   const [editingLearner, setEditingLearner] = useState<Learner | null>(null);
   const [showCsvModal, setShowCsvModal] = useState<boolean>(false);
+  const [showClassModal, setShowClassModal] = useState<boolean>(false);
+  const [classForm, setClassForm] = useState({ grade: '9', section: '', subject: '', room: '', periodSchedule: '' });
 
   // CSV State
   const [csvRawText, setCsvRawText] = useState<string>('');
@@ -56,41 +60,79 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
 
   // Form State for Add / Edit Learner
   const [formData, setFormData] = useState<Partial<Learner>>({
-    learnerNumber: 'TSS-2026-089',
+    learnerNumber: '',
     firstName: '',
     lastName: '',
     gender: 'Female',
     grade: '9',
-    classSection: '9A',
-    dateOfBirth: '2011-05-10',
+    classSection: classes[0]?.section || '',
+    dateOfBirth: '',
     guardianName: '',
-    guardianPhone: '+27 82 000 0000',
+    guardianPhone: '',
     guardianEmail: '',
     guardianRelationship: 'Mother',
     homeLanguage: 'zu',
     specialNeedsNotes: '',
     academicNotes: '',
-    consentStatus: 'opted-in',
+    consentStatus: 'pending',
   });
+
+  const handleOpenClassModal = () => {
+    setClassForm({ grade: '9', section: '', subject: '', room: '', periodSchedule: '' });
+    setShowClassModal(true);
+  };
+
+  const handleSaveClass = (e: React.FormEvent) => {
+    e.preventDefault();
+    const grade = classForm.grade.trim();
+    const section = classForm.section.trim().toUpperCase().replace(/\s+/g, '');
+    const subject = classForm.subject.trim();
+
+    if (!subject || !/^(8|9|10|11|12)[A-Z0-9]+$/.test(section) || !section.startsWith(grade)) {
+      showToast('error', 'Check Class Details', 'Enter a class code such as 9A that matches the selected grade, and add a subject.');
+      return;
+    }
+
+    if (classes.some((cls) => cls.section.toUpperCase() === section)) {
+      showToast('error', 'Class Already Exists', 'A class with this code already exists.');
+      return;
+    }
+
+    const newClass: ClassGroup = {
+      id: 'class-' + Date.now(),
+      grade,
+      section,
+      name: 'Grade ' + section,
+      subject,
+      room: classForm.room.trim(),
+      learnerCount: 0,
+      periodSchedule: classForm.periodSchedule.trim(),
+    };
+
+    onAddClass(newClass);
+    setSelectedClassTab(section);
+    setShowClassModal(false);
+    showToast('success', 'Class Created', newClass.name + ' is ready for learner records.');
+  };
 
   const handleOpenAdd = () => {
     setEditingLearner(null);
     setFormData({
-      learnerNumber: `TSS-2026-${String(learners.length + 1).padStart(3, '0')}`,
+      learnerNumber: '',
       firstName: '',
       lastName: '',
       gender: 'Female',
       grade: selectedClassTab === 'All' ? '9' : selectedClassTab.replace(/[^\d]/g, ''),
-      classSection: selectedClassTab === 'All' ? '9A' : selectedClassTab,
-      dateOfBirth: '2011-05-10',
+      classSection: (classes.find((cls) => cls.section === selectedClassTab) || classes[0])?.section || '',
+      dateOfBirth: '',
       guardianName: '',
-      guardianPhone: '+27 82 ',
+      guardianPhone: '',
       guardianEmail: '',
       guardianRelationship: 'Mother',
       homeLanguage: 'zu',
       specialNeedsNotes: '',
       academicNotes: '',
-      consentStatus: 'opted-in',
+      consentStatus: 'pending',
     });
     setShowAddEditModal(true);
   };
@@ -108,6 +150,11 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
       return;
     }
 
+    if (!classes.some((cls) => cls.section === formData.classSection)) {
+      showToast('error', 'Class Required', 'Create or select a class before registering a learner.');
+      return;
+    }
+
     if (editingLearner) {
       const updated: Learner = {
         ...editingLearner,
@@ -118,13 +165,13 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
     } else {
       const created: Learner = {
         id: `lrn-${Date.now()}`,
-        learnerNumber: formData.learnerNumber || `TSS-2026-${Date.now().toString().slice(-3)}`,
+        learnerNumber: formData.learnerNumber || `L-${Date.now()}`,
         firstName: formData.firstName!,
         lastName: formData.lastName!,
         gender: formData.gender || 'Female',
         grade: formData.grade || '9',
         classSection: formData.classSection || '9A',
-        dateOfBirth: formData.dateOfBirth || '2011-01-01',
+        dateOfBirth: formData.dateOfBirth || '',
         guardianName: formData.guardianName!,
         guardianPhone: formData.guardianPhone || '',
         guardianEmail: formData.guardianEmail || '',
@@ -132,7 +179,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
         homeLanguage: formData.homeLanguage || 'zu',
         specialNeedsNotes: formData.specialNeedsNotes,
         academicNotes: formData.academicNotes,
-        consentStatus: formData.consentStatus || 'opted-in',
+        consentStatus: formData.consentStatus || 'pending',
       };
       onAddLearner(created);
       showToast('success', 'Learner Added', `${created.firstName} ${created.lastName} registered in ${created.classSection}.`);
@@ -149,14 +196,11 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   };
 
   // CSV Parsing & Validation
-  const sampleCsvData = `LearnerNumber,FirstName,LastName,Gender,Grade,Class,GuardianName,Relationship,Phone,Email,Language
-TSS-2026-021,Kholofelo,Mashishi,Male,9,9A,Mrs. Pinky Mashishi,Mother,+27 82 341 9021,pmashishi@gmail.com,zu
-TSS-2026-022,Wandile,Ndaba,Female,9,9A,Mr. Joseph Ndaba,Father,+27 71 884 1209,jndaba@saps.gov.za,zu
-TSS-2026-023,Bianca,Botha,Female,10,10B,Mev. Sonja Botha,Mother,+27 84 319 4481,sonja.botha@vodamail.co.za,af
-TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 991 3042,,zu`;
+  const sampleCsvData = 'LearnerNumber,FirstName,LastName,Gender,Grade,Class,GuardianName,Relationship,Phone,Email,Language';
 
   const handleLoadSampleCsv = () => {
     setCsvRawText(sampleCsvData);
+    showToast('info', 'CSV Header Loaded', 'Add your own rows. No sample learner records are included.');
   };
 
   const handleParseCsv = () => {
@@ -196,22 +240,26 @@ TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 9
       if (!firstName) errors.push('Missing first name');
       if (!lastName) errors.push('Missing last name');
       if (!phone || phone.length < 9) errors.push('Invalid phone format');
+      if (!(values[numIdx >= 0 ? numIdx : 0] || '').trim()) errors.push('Missing learner number');
+      if (!(values[gnIdx >= 0 ? gnIdx : 6] || '').trim()) errors.push('Missing guardian name');
+      const classCode = values[clIdx >= 0 ? clIdx : 5] || '';
+      if (!classes.some((cls) => cls.section === classCode)) errors.push('Unknown class section');
 
       const learner: Partial<Learner> = {
         id: `lrn-csv-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-        learnerNumber: values[numIdx >= 0 ? numIdx : 0] || `TSS-2026-${Math.floor(Math.random() * 800 + 100)}`,
+        learnerNumber: values[numIdx >= 0 ? numIdx : 0] || '',
         firstName,
         lastName,
         gender: (values[genIdx >= 0 ? genIdx : 3] as any) || 'Female',
-        grade: values[grIdx >= 0 ? grIdx : 4] || '9',
-        classSection: values[clIdx >= 0 ? clIdx : 5] || '9A',
-        dateOfBirth: '2011-03-15',
-        guardianName: values[gnIdx >= 0 ? gnIdx : 6] || 'Guardian',
+        grade: values[grIdx >= 0 ? grIdx : 4] || '',
+        classSection: values[clIdx >= 0 ? clIdx : 5] || '',
+        dateOfBirth: '',
+        guardianName: values[gnIdx >= 0 ? gnIdx : 6] || '',
         guardianRelationship: (values[relIdx >= 0 ? relIdx : 7] as any) || 'Mother',
         guardianPhone: phone,
         guardianEmail: values[emIdx >= 0 ? emIdx : 9] || '',
         homeLanguage: (values[lgIdx >= 0 ? lgIdx : 10] as LanguageCode) || 'zu',
-        consentStatus: 'opted-in',
+        consentStatus: 'pending',
       };
 
       return {
@@ -267,7 +315,10 @@ TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 9
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" onClick={handleOpenClassModal} className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#5145C5] text-xs font-semibold">
+            <Plus className="w-4 h-4" /><span>Add Class</span>
+          </button>
           <button
             onClick={() => {
               setCsvStep('input');
@@ -281,6 +332,8 @@ TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 9
 
           <button
             onClick={handleOpenAdd}
+            disabled={classes.length === 0}
+            title={classes.length === 0 ? 'Create a class before adding learners' : 'Add a learner'}
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#5145C5] text-white text-xs font-bold hover:bg-[#4337b0] transition-colors shadow-sm active:scale-95"
           >
             <Plus className="w-4 h-4" />
@@ -291,7 +344,15 @@ TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 9
 
       {/* Class Cohorts KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {classes.map((cls) => {
+        {classes.length === 0 ? (
+          <div className="col-span-full rounded-2xl border border-dashed border-[#C9C5F0] bg-white p-6 text-center">
+            <h3 className="text-sm font-bold text-[#171936]">No classes created yet</h3>
+            <p className="text-xs text-gray-500 mt-1">Create a class first, then add learners or import a roster.</p>
+            <button type="button" onClick={handleOpenClassModal} className="mt-3 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#5145C5] text-white text-xs font-bold">
+              <Plus className="w-4 h-4" /> Create First Class
+            </button>
+          </div>
+        ) : classes.map((cls) => {
           const count = learners.filter((l) => l.classSection === cls.section).length;
           const isSelected = selectedClassTab === cls.section;
           return (
@@ -378,7 +439,7 @@ TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 9
               {filteredLearners.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-xs text-gray-400">
-                    No learners found matching criteria.
+                    No learner records yet. Add a learner or import your own CSV to get started.
                   </td>
                 </tr>
               ) : (
@@ -462,6 +523,54 @@ TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 9
         </div>
       </div>
 
+      {showClassModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gray-100 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b">
+              <div>
+                <h3 className="text-base font-bold text-[#171936]">Create a Class</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Set up a class before adding learners.</p>
+              </div>
+              <button type="button" onClick={() => setShowClassModal(false)} className="text-gray-400 hover:text-gray-600 p-1" aria-label="Close class form">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleSaveClass} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">Grade</label>
+                  <select value={classForm.grade} onChange={(e) => setClassForm({ ...classForm, grade: e.target.value, section: '' })} className="w-full px-3 py-2 rounded-xl border border-gray-200 bg-white">
+                    {['8', '9', '10', '11', '12'].map((grade) => <option key={grade} value={grade}>Grade {grade}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">Class Code</label>
+                  <input required value={classForm.section} onChange={(e) => setClassForm({ ...classForm, section: e.target.value.toUpperCase() })} placeholder={classForm.grade + 'A'} className="w-full px-3 py-2 rounded-xl border border-gray-200" />
+                </div>
+              </div>
+              <div>
+                <label className="font-bold text-gray-700 block mb-1">Subject</label>
+                <input required value={classForm.subject} onChange={(e) => setClassForm({ ...classForm, subject: e.target.value })} placeholder="e.g. Natural Sciences" className="w-full px-3 py-2 rounded-xl border border-gray-200" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">Room (optional)</label>
+                  <input value={classForm.room} onChange={(e) => setClassForm({ ...classForm, room: e.target.value })} placeholder="e.g. Room 12" className="w-full px-3 py-2 rounded-xl border border-gray-200" />
+                </div>
+                <div>
+                  <label className="font-bold text-gray-700 block mb-1">Period / Schedule (optional)</label>
+                  <input value={classForm.periodSchedule} onChange={(e) => setClassForm({ ...classForm, periodSchedule: e.target.value })} placeholder="e.g. Period 2" className="w-full px-3 py-2 rounded-xl border border-gray-200" />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-3 border-t">
+                <button type="button" onClick={() => setShowClassModal(false)} className="px-3 py-2 rounded-xl bg-gray-100 text-gray-700 font-semibold">Cancel</button>
+                <button type="submit" className="px-4 py-2 rounded-xl bg-[#5145C5] text-white font-bold hover:bg-[#4337b0]">Create Class</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* ================================================================ */}
       {/* MODAL 1: ADD / EDIT LEARNER */}
       {/* ================================================================ */}
@@ -517,7 +626,7 @@ TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 9
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">Class Section</label>
                   <select
-                    value={formData.classSection || '9A'}
+                    value={formData.classSection || ''}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
@@ -527,10 +636,8 @@ TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 9
                     }
                     className="w-full px-2 py-2 rounded-xl border border-gray-200 bg-white"
                   >
-                    <option value="9A">9A (Natural Sciences)</option>
-                    <option value="9B">9B (Natural Sciences)</option>
-                    <option value="10B">10B (Life Sciences)</option>
-                    <option value="11A">11A (Life Sciences)</option>
+                    <option value="">Select a class</option>
+                    {classes.map((cls) => <option key={cls.id} value={cls.section}>{cls.name} ({cls.subject})</option>)}
                   </select>
                 </div>
                 <div>
@@ -656,14 +763,14 @@ TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 9
             {csvStep === 'input' ? (
               <div className="space-y-4 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-gray-700">Paste CSV Contents or Load Sample</span>
+                  <span className="font-bold text-gray-700">Paste CSV Contents or Load Header</span>
                   <button
                     type="button"
                     onClick={handleLoadSampleCsv}
                     className="flex items-center gap-1 text-[#5145C5] font-bold hover:underline"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span>Load Sample South African CSV</span>
+                    <span>Load CSV Header</span>
                   </button>
                 </div>
 
