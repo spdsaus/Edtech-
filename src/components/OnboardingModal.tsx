@@ -78,7 +78,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       tagline: 'Streamlined cohort management & educator authority.',
       icon: Users,
       description:
-        'Add learner records or preview the CSV import flow. Class creation and live timetable integration still need product work.',
+        'Create your own class, add learner records or preview the CSV import flow. Live timetable integration is not connected.',
       features: [
         'CSV preview and basic row validation',
         'Teacher-in-the-loop: The assistant suggests, the educator approves',
