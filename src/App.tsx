@@ -61,6 +61,13 @@ function MainApp() {
   };
 
   // 1. Classes & Learners Handlers
+  const handleAddClass = (classGroup: ClassGroup) => {
+    const updated = [classGroup, ...classes];
+    setClasses(updated);
+    StorageService.saveClasses(updated);
+    notifyStateChange();
+  };
+
   const handleAddLearner = (learner: Learner) => {
     const updated = [learner, ...learners];
     setLearners(updated);
@@ -376,6 +383,7 @@ function MainApp() {
               onUpdateLearner={handleUpdateLearner}
               onDeleteLearner={handleDeleteLearner}
               onBatchImportLearners={handleBatchImportLearners}
+              onAddClass={handleAddClass}
             />
           )}
 
