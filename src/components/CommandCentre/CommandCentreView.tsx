@@ -83,7 +83,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
   const [directoryClassFilter, setDirectoryClassFilter] = useState<string>('All');
   const [directorySearch, setDirectorySearch] = useState<string>('');
 
-  // Check Quiet Hours status (Simulated check against 18:00 - 06:30)
+  // Check configured school quiet hours using South African local time.
   const getMinutes = (value: string) => {
     const [hours, minutes] = value.split(':').map(Number);
     return Number.isInteger(hours) && Number.isInteger(minutes) ? hours * 60 + minutes : null;
@@ -161,18 +161,14 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
   // Execute Save Draft
   const handleConfirmSend = () => {
     if (eligible.length === 0) {
-      showToast('warning', 'No Eligible Recipients', 'Add a guardian with recorded consent before creating a dispatch preview.');
-      return;
-    }
-    if (scheduleOption === 'now' && settings.enforceQuietHours && isQuietHoursActive) {
-      showToast('error', 'Quiet Hours Active', 'Choose a delivery time outside the configured quiet hours.');
+      showToast('warning', 'No Eligible Recipients', 'Add a guardian and record their consent before saving a recipient-specific draft.');
       return;
     }
     if (scheduleOption === 'custom' && (!customScheduleTime || new Date(customScheduleTime).getTime() <= Date.now())) {
       showToast('error', 'Invalid Schedule', 'Choose a future date and time.');
       return;
     }
-    const isScheduled = scheduleOption !== 'now';
+    const hasProposedSchedule = scheduleOption !== 'now';
     const newLog: MessageLog = {
       id: `msg-${Date.now()}`,
       recipientType,
@@ -183,7 +179,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
       subject: messageSubject,
       body: messageBody,
       status: 'Draft',
-      sentAt: isScheduled
+      sentAt: hasProposedSchedule
         ? `Proposed schedule: ${scheduleOption === 'morning' ? 'Tomorrow 07:30 (South Africa time)' : customScheduleTime}`
         : `Draft saved ${new Date().toLocaleString('en-ZA', { timeZone: 'Africa/Johannesburg' })} (South Africa time)`,
       isSimulated: true,
