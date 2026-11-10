@@ -29,7 +29,7 @@ Vite serves the app locally at the address printed by the dev server (normally h
 The Pages build uses the project-site base path `/Edtech-/`. Local development keeps the normal `/` base path.
 
 The deployment workflow:
-1. Runs on pushes to `main` or manual dispatch.
+1. Runs only on pushes to `main`.
 2. Installs dependencies and runs the TypeScript check.
 3. Builds the static site with `GITHUB_PAGES=true`.
 4. Deploys the generated `dist` directory using GitHub Pages Actions.
