@@ -196,7 +196,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               {settings.pendingSyncCount} pending
             </span>
           ) : (
-            <span className="text-[10px] opacity-70">Synced</span>
+            <span className="text-[10px] opacity-70">Local only</span>
           )}
         </button>
 
