@@ -80,7 +80,7 @@ function MainApp() {
       preferredLanguage: learner.homeLanguage,
       preferredChannel: 'WhatsApp',
       consentStatus: learner.consentStatus,
-      consentDate: new Date().toISOString().split('T')[0],
+      ...(learner.consentStatus === 'opted-in' ? { consentDate: new Date().toISOString().split('T')[0] } : {}),
     };
     const updatedParents = [newParent, ...parents];
     setParents(updatedParents);
