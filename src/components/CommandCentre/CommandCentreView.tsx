@@ -104,7 +104,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
       const eligible = classParents.filter((p) => p.consentStatus === 'opted-in');
       const excluded = classParents.filter((p) => p.consentStatus !== 'opted-in');
       return {
-        targetName: `Grade ${selectedClass} Guardians (${eligible.length} eligible)`,
+        targetName: `Grade ${selectedClass || '—'} Guardians (${eligible.length} eligible)`,
         eligible,
         excluded,
       };
