@@ -61,30 +61,41 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
 
   // Form State
   const [recipientType, setRecipientType] = useState<'Class' | 'Group' | 'Individual'>('Class');
-  const [selectedClass, setSelectedClass] = useState<string>('9A');
+  const [selectedClass, setSelectedClass] = useState<string>('');
   const [selectedIndividualParentId, setSelectedIndividualParentId] = useState<string>('');
   const [selectedChannel, setSelectedChannel] = useState<ChannelType>('WhatsApp');
   const [selectedLanguage, setSelectedLanguage] = useState<LanguageCode>('en');
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0].id);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>(templates[0]?.id || '');
 
   // Editable message contents
   const [messageSubject, setMessageSubject] = useState<string>(
-    templates[0].translations.en.subject
+    templates[0]?.translations.en.subject || ''
   );
   const [messageBody, setMessageBody] = useState<string>(
-    templates[0].translations.en.body
+    templates[0]?.translations.en.body || ''
   );
 
   // Scheduling options
   const [scheduleOption, setScheduleOption] = useState<'now' | 'morning' | 'custom'>('now');
-  const [customScheduleTime, setCustomScheduleTime] = useState<string>('2026-05-19 07:30');
+  const [customScheduleTime, setCustomScheduleTime] = useState<string>('');
 
   // Directory filter states
   const [directoryClassFilter, setDirectoryClassFilter] = useState<string>('All');
   const [directorySearch, setDirectorySearch] = useState<string>('');
 
   // Check Quiet Hours status (Simulated check against 18:00 - 06:30)
-  const isQuietHoursActive = true; // Flagged active for demonstration of South African educator safety rules
+  const getMinutes = (value: string) => {
+    const [hours, minutes] = value.split(':').map(Number);
+    return Number.isInteger(hours) && Number.isInteger(minutes) ? hours * 60 + minutes : null;
+  };
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  const quietStart = getMinutes(settings.quietHoursStart);
+  const quietEnd = getMinutes(settings.quietHoursEnd);
+  const isQuietHoursActive = Boolean(settings.enforceQuietHours && quietStart !== null && quietEnd !== null &&
+    (quietStart <= quietEnd
+      ? currentMinutes >= quietStart && currentMinutes < quietEnd
+      : currentMinutes >= quietStart || currentMinutes < quietEnd));
 
   // Recipient computation & Opt-out filtering
   const getRecipients = () => {
@@ -106,7 +117,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
         excluded,
       };
     } else {
-      const parent = parents.find((p) => p.id === selectedIndividualParentId) || parents[0];
+      const parent = parents.find((p) => p.id === selectedIndividualParentId);
       const isEligible = parent?.consentStatus === 'opted-in';
       return {
         targetName: `${parent?.guardianName} (${parent?.learnerName})`,
@@ -142,6 +153,18 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
 
   // Execute Simulated Send
   const handleConfirmSend = () => {
+    if (eligible.length === 0) {
+      showToast('warning', 'No Eligible Recipients', 'Add a guardian with recorded consent before creating a dispatch preview.');
+      return;
+    }
+    if (scheduleOption === 'now' && settings.enforceQuietHours && isQuietHoursActive) {
+      showToast('error', 'Quiet Hours Active', 'Choose a delivery time outside the configured quiet hours.');
+      return;
+    }
+    if (scheduleOption === 'custom' && (!customScheduleTime || new Date(customScheduleTime).getTime() <= Date.now())) {
+      showToast('error', 'Invalid Schedule', 'Choose a future date and time.');
+      return;
+    }
     const isScheduled = scheduleOption !== 'now';
     const newLog: MessageLog = {
       id: `msg-${Date.now()}`,
@@ -152,7 +175,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
       language: selectedLanguage,
       subject: messageSubject,
       body: messageBody,
-      status: isScheduled ? 'Scheduled' : 'Sent',
+      status: isScheduled ? 'Scheduled' : 'Draft',
       sentAt: isScheduled
         ? `Scheduled for ${scheduleOption === 'morning' ? 'Tomorrow 07:30' : customScheduleTime}`
         : new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' }) + ' Today',
@@ -164,7 +187,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
     setWorkflowStep('confirmed');
     showToast(
       'success',
-      isScheduled ? 'Broadcast Scheduled' : 'Simulated Message Dispatched',
+      isScheduled ? 'Broadcast Scheduled' : 'Simulated Dispatch Draft Created',
       `${eligible.length} parents queued. ${excluded.length} opted-out contacts safely bypassed.`
     );
   };
@@ -290,12 +313,12 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
                     School Quiet Hours Enforced ({settings.quietHoursStart} – {settings.quietHoursEnd})
                   </strong>
                   <span className="text-[#C5C8E5]">
-                    Thandeka Secondary policy prevents outbound messaging during evening family hours.
+                    Configured school quiet hours prevent immediate dispatch during this period.
                   </span>
                 </div>
               </div>
               <span className="text-[10px] bg-indigo-800 text-indigo-200 font-bold px-2 py-1 rounded-md">
-                Auto-Schedule Active
+                Scheduling Required
               </span>
             </div>
           )}
