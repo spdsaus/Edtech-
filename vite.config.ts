@@ -5,6 +5,9 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
+    // GitHub Pages hosts this project under /Edtech-/.
+    // Keep local development and ordinary builds at /.
+    base: process.env.GITHUB_PAGES === 'true' ? '/Edtech-/' : '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
