@@ -552,7 +552,7 @@ export const CommandCentreView: React.FC<CommandCentreViewProps> = ({
                   <div className="flex items-center justify-between border-b pb-2 text-[11px] text-gray-500">
                     <div className="flex items-center gap-1.5 font-bold text-[#171936]">
                       <Radio className="w-3.5 h-3.5 text-[#5145C5]" />
-                      <span>Thandeka Secondary • {selectedChannel}</span>
+                      <span>{settings.schoolName || 'Your school'} • {selectedChannel}</span>
                     </div>
                     <span>Language: {selectedLanguage.toUpperCase()}</span>
                   </div>
