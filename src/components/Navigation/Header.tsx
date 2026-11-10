@@ -77,7 +77,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right Actions: Sync status, Quick actions, Help */}
         <div className="flex items-center gap-2 self-end sm:self-center">
-          {/* Connectivity simulation pill */}
+          {/* Local storage status pill */}
           <button
             onClick={onToggleOnline}
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
@@ -85,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
                 ? 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
                 : 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100 animate-pulse'
             }`}
-            title="Toggle Simulated Load-Shedding / Offline Mode"
+            title="Toggle prototype local/offline indicator"
           >
             {settings.isOnlineMode ? (
               <Wifi className="w-3.5 h-3.5 text-emerald-600" />
