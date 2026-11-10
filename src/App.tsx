@@ -145,8 +145,7 @@ function MainApp() {
       email: learner.guardianEmail,
       preferredLanguage: learner.homeLanguage,
       preferredChannel: 'WhatsApp',
-      consentStatus: 'opted-in',
-      consentDate: new Date().toISOString().split('T')[0],
+      consentStatus: learner.consentStatus,
     }));
 
     const updatedParents = [...newParents, ...parents];
@@ -268,7 +267,7 @@ function MainApp() {
     StorageService.saveSettings(updated);
 
     if (nextOnline) {
-      showToast('success', 'Back Online', 'Flushed pending offline cache to simulated cloud storage.');
+      showToast('success', 'Back Online', 'This prototype stores changes in this browser only; cloud sync is not connected.');
     } else {
       showToast('warning', 'Offline / Load-Shedding Mode', 'Local storage active. Changes will queue until connection returns.');
     }
@@ -287,7 +286,7 @@ function MainApp() {
     setSettings(StorageService.getSettings());
     setTimetable(StorageService.getTimetable());
     setSelectedLessonForView(null);
-    showToast('success', 'Demo Reset Complete', 'All data restored to original Thandeka Secondary demo state.');
+    showToast('success', 'Workspace Cleared', 'Local prototype records have been cleared.');
   };
 
   // Navigation shortcuts
