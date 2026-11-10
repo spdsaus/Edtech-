@@ -140,10 +140,10 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onResetDemo}
             className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors border border-gray-200"
-            title="Reset to fresh Thandeka Secondary demo data"
+            title="Clear local prototype data"
           >
             <RotateCcw className="w-3 h-3 text-gray-500" />
-            <span className="hidden lg:inline text-[11px]">Reset Data</span>
+            <span className="hidden lg:inline text-[11px]">Clear Data</span>
           </button>
         </div>
       </div>
