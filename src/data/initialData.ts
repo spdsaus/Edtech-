@@ -39,19 +39,19 @@ export const INITIAL_TEMPLATES: MessageTemplate[] = [
       },
       zu: {
         subject: '{SchoolName}: Isikhumbuzo Somsebenzi Wasekhaya ne-Test ka-{LearnerName}',
-        body: 'Sawubona {GuardianName},\n\nYimi uNkkz Dlamini wase-{SchoolName} School. Ngiyakukhumbuza ukuthi u-{LearnerName} unomsebenzi obalulekile we-Natural Sciences okumele uwulethe ngoLwesihlanu. Sinokuhlolwa kweThemu 2 ngeviki elizayo.\n\nSicela usize ngokukhuthaza u-{LearnerName} ukuthi abuyekeze izahluko 4 no-5 encwadini yakhe okungenani imizuzu engu-30 namhlanje.\n\nOzithobayo,\nUNkkz N. Dlamini\n{SchoolName} School',
+        body: 'Sawubona {GuardianName},\n\nYimi u{TeacherName} wase-{SchoolName} School. Ngiyakukhumbuza ukuthi u-{LearnerName} unomsebenzi obalulekile we-Natural Sciences okumele uwulethe ngoLwesihlanu. Sinokuhlolwa kweThemu 2 ngeviki elizayo.\n\nSicela usize ngokukhuthaza u-{LearnerName} ukuthi abuyekeze izahluko 4 no-5 encwadini yakhe okungenani imizuzu engu-30 namhlanje.\n\nOzithobayo,\nUNkkz N. Dlamini\n{SchoolName} School',
       },
       xh: {
         subject: '{SchoolName}: Isikhumbuzo Somsebenzi Wasekhaya ka-{LearnerName}',
-        body: 'Molo {GuardianName},\n\nNdinguNkskz Dlamini wase-{SchoolName} School. Ndicela ukunikhumbuza ukuba u-{LearnerName} unomsebenzi obalulekileyo we-Natural Sciences omakangeniswe ngoLwesihlanu. Kwakhona sinovavanyo lweKota 2 kwiveki ezayo.\n\nNceda ukhuthaze u-{LearnerName} ukuba ahlaziye izahluko 4 no-5 kwincwadi yakhe yemigangatho.\n\nOzithobileyo,\nUNkskz N. Dlamini\n{SchoolName} School',
+        body: 'Molo {GuardianName},\n\nNdingu{TeacherName} wase-{SchoolName} School. Ndicela ukunikhumbuza ukuba u-{LearnerName} unomsebenzi obalulekileyo we-Natural Sciences omakangeniswe ngoLwesihlanu. Kwakhona sinovavanyo lweKota 2 kwiveki ezayo.\n\nNceda ukhuthaze u-{LearnerName} ukuba ahlaziye izahluko 4 no-5 kwincwadi yakhe yemigangatho.\n\nOzithobileyo,\nUNkskz N. Dlamini\n{SchoolName} School',
       },
       af: {
-        subject: 'Thandeka Sekondêr: Huiswerk en Toets Herinnering vir {LearnerName}',
+        subject: '{SchoolName} Sekondêr: Huiswerk en Toets Herinnering vir {LearnerName}',
         body: 'Goeiedag {GuardianName},\n\nDit is Me. Dlamini van {SchoolName}. Let asseblief daarop dat {LearnerName} \'n belangrike Natuurwetenskappe-opdrag het wat Vrydag ingehandig moet word. Ons skryf ook volgende week ons Kwartaal 2-toets.\n\nMoedig {LearnerName} asseblief aan om minstens 30 minute te bestee aan hersiening van hoofstukke 4 en 5.\n\nVriendelike groete,\nMe. N. Dlamini\n{SchoolName}',
       },
       st: {
         subject: '{SchoolName}: Kgopotso ya Mosebetsi wa Lapeng wa {LearnerName}',
-        body: 'Dumela {GuardianName},\n\nKe Mofumahatsana Dlamini ho tswa {SchoolName} School. Re rata ho le hopotsa hore {LearnerName} o na le mosebetsi wa bohlokwa wa Natural Sciences o tlamehang ho fanoa ka Labohlano. Re boetse re na le Teko ya Kotara ya 2 bekeng e tlang.\n\nRe kopa le kgothatse {LearnerName} ho bala kgaolo 4 le 5 ka bukeng bonyane metsotso e 30 kajeno.\n\nKa boikokobetso,\nMofumahatsana N. Dlamini\n{SchoolName} School',
+        body: 'Dumela {GuardianName},\n\nKe {TeacherName} ho tswa {SchoolName} School. Re rata ho le hopotsa hore {LearnerName} o na le mosebetsi wa bohlokwa wa Natural Sciences o tlamehang ho fanoa ka Labohlano. Re boetse re na le Teko ya Kotara ya 2 bekeng e tlang.\n\nRe kopa le kgothatse {LearnerName} ho bala kgaolo 4 le 5 ka bukeng bonyane metsotso e 30 kajeno.\n\nKa boikokobetso,\nMofumahatsana N. Dlamini\n{SchoolName} School',
       },
     },
   },
@@ -89,19 +89,19 @@ export const INITIAL_TEMPLATES: MessageTemplate[] = [
     translations: {
       en: {
         subject: '{SchoolName}: Parent-Teacher Consultation Evening Invitation',
-        body: 'Dear {GuardianName},\n\nYou are cordially invited to our Term 2 Parent-Teacher Academic Consultation Evening on Thursday, 28 May 2026, from 16:30 to 18:30 in the School Hall.\n\nThis will be an opportunity to review {LearnerName}\'s term marks, workbook progress, and discuss intervention strategies ahead of the mid-year examinations.\n\nPlease confirm your attendance by replying to this notice.\n\nKind regards,\nMs. N. Dlamini (Science Department)\n{SchoolName} School',
+        body: 'Dear {GuardianName},\n\nYou are cordially invited to our Term 2 Parent-Teacher Academic Consultation Evening on on {MeetingDate} at {MeetingTime} in {MeetingVenue}.\n\nThis will be an opportunity to review {LearnerName}\'s term marks, workbook progress, and discuss intervention strategies ahead of the mid-year examinations.\n\nPlease confirm your attendance by replying to this notice.\n\nKind regards,\nMs. N. Dlamini (Science Department)\n{SchoolName} School',
       },
       zu: {
         subject: '{SchoolName}: Isimemo Somhlangano Wabazali Nothisha',
-        body: 'Mzali Obekekile {GuardianName},\n\nUyamenywa ngokuzithoba eMhlanganweni Wabazali Nothisha weThemu 2 ngoLwesine, mhla zingama-28 kuMeyi 2026, kusukela ngo-16:30 kuya ku-18:30 eHholo Lesikole.\n\nLeli yithuba lokubheka imiphumela ka-{LearnerName}, amabhuku akhe okufunda, kanye nokuhlela izindlela zokumeseka ngaphambi kokuhlolwa kukaNhlangulana.\n\nSicela uqinisekise ukuthi uzofika ngokuphendula lo mlayezo.\n\nOzithobayo,\nUNkkz N. Dlamini\n{SchoolName} School',
+        body: 'Mzali Obekekile {GuardianName},\n\nUyamenywa ngokuzithoba eMhlanganweni Wabazali Nothisha weThemu 2 ngo-{MeetingDate}, kusukela ngo-{MeetingTime} e-{MeetingVenue}.\n\nLeli yithuba lokubheka imiphumela ka-{LearnerName}, amabhuku akhe okufunda, kanye nokuhlela izindlela zokumeseka ngaphambi kokuhlolwa kukaNhlangulana.\n\nSicela uqinisekise ukuthi uzofika ngokuphendula lo mlayezo.\n\nOzithobayo,\nUNkkz N. Dlamini\n{SchoolName} School',
       },
       xh: {
         subject: '{SchoolName}: Isimemo Sentlanganiso Yabazali Nootitshala',
-        body: 'Mzali Obekekileyo {GuardianName},\n\nUyamenywa ngembeko kwiNtlanganiso Yabazali Nootitshala yeKota 2 ngoLwesine, umhla wama-28 kuCanzibe 2026, ukususela ngo-16:30 ukuya ku-18:30 kwiHolo yeSikolo.\n\nEli lithuba lokuphonononga amanqaku ka-{LearnerName}, imisebenzi yakhe yaseklasini, kunye nokuxoxa ngamaphulo okumnceda ngaphambi kweemviwo zaphakathi enyakeni.\n\nNceda uqinisekise ubukho bakho ngokuphendula lo myalezo.\n\nOzithobileyo,\nUNkskz N. Dlamini\n{SchoolName} School',
+        body: 'Mzali Obekekileyo {GuardianName},\n\nUyamenywa ngembeko kwiNtlanganiso Yabazali Nootitshala yeKota 2 ngo-{MeetingDate}, ukususela ngo-{MeetingTime} e-{MeetingVenue}.\n\nEli lithuba lokuphonononga amanqaku ka-{LearnerName}, imisebenzi yakhe yaseklasini, kunye nokuxoxa ngamaphulo okumnceda ngaphambi kweemviwo zaphakathi enyakeni.\n\nNceda uqinisekise ubukho bakho ngokuphendula lo myalezo.\n\nOzithobileyo,\nUNkskz N. Dlamini\n{SchoolName} School',
       },
       af: {
-        subject: 'Thandeka Sekondêr: Ouer-Onderwyser Konsultasie Aand Uitnodiging',
-        body: 'Geagte {GuardianName},\n\nU word vriendelik uitgenooi na ons Kwartaal 2 Ouer-Onderwyser Aand op Donderdag, 28 Mei 2026, vanaf 16:30 tot 18:30 in die Skoolsaal.\n\nDit bied \'n gulde geleentheid om {LearnerName} se vordering, werksboeke en doelwitte voor die middeljaareksamen te bespreek.\n\nBevestig asseblief u bywoning deur op hierdie kennisgewing te antwoord.\n\nVriendelike groete,\nMe. N. Dlamini\n{SchoolName}',
+        subject: '{SchoolName} Sekondêr: Ouer-Onderwyser Konsultasie Aand Uitnodiging',
+        body: 'Geagte {GuardianName},\n\nU word vriendelik uitgenooi na ons Kwartaal 2 Ouer-Onderwyser Aand op op {MeetingDate}, vanaf {MeetingTime} by {MeetingVenue}.\n\nDit bied \'n gulde geleentheid om {LearnerName} se vordering, werksboeke en doelwitte voor die middeljaareksamen te bespreek.\n\nBevestig asseblief u bywoning deur op hierdie kennisgewing te antwoord.\n\nVriendelike groete,\nMe. N. Dlamini\n{SchoolName}',
       },
       st: {
         subject: '{SchoolName}: Memo ya Kopano ya Batswadi le Matitjhere',
