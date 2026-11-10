@@ -68,11 +68,11 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     const updated = {
       ...formData,
       pendingSyncCount: 0,
-      lastSyncedAt: new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' (Manual Sync)',
+      lastSyncedAt: 'Local device storage only — cloud sync is not connected',
     };
     setFormData(updated);
     onSaveSettings(updated);
-    showToast('info', 'Local Data Saved', 'This prototype stores data in this browser only. Cloud sync is not connected.');
+    showToast('info', 'Local Counter Cleared', 'This only clears the prototype counter. No cloud sync is performed.');
   };
 
   return (
