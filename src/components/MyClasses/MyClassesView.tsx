@@ -28,7 +28,7 @@ interface MyClassesViewProps {
   onAddLearner: (learner: Learner) => void;
   onUpdateLearner: (learner: Learner) => void;
   onDeleteLearner: (learnerId: string) => void;
-  onBatchImportLearners: (newLearners: Learner[]) => void;
+  onBatchImportLearners: (newLearners: Learner[]) => void;\n  onAddClass: (classGroup: ClassGroup) => void;
 }
 
 export const MyClassesView: React.FC<MyClassesViewProps> = ({
@@ -47,7 +47,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   // Modals
   const [showAddEditModal, setShowAddEditModal] = useState<boolean>(false);
   const [editingLearner, setEditingLearner] = useState<Learner | null>(null);
-  const [showCsvModal, setShowCsvModal] = useState<boolean>(false);
+  const [showCsvModal, setShowCsvModal] = useState<boolean>(false);\n  const [showClassModal, setShowClassModal] = useState<boolean>(false);\n  const [classForm, setClassForm] = useState({ grade: '9', section: '', subject: '', room: '', periodSchedule: '' });
 
   // CSV State
   const [csvRawText, setCsvRawText] = useState<string>('');
@@ -61,7 +61,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
     lastName: '',
     gender: 'Female',
     grade: '9',
-    classSection: '9A',
+    classSection: classes[0]?.section || '',
     dateOfBirth: '',
     guardianName: '',
     guardianPhone: '',
@@ -73,6 +73,44 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
     consentStatus: 'pending',
   });
 
+  const handleOpenClassModal = () => {
+    setClassForm({ grade: '9', section: '', subject: '', room: '', periodSchedule: '' });
+    setShowClassModal(true);
+  };
+
+  const handleSaveClass = (e: React.FormEvent) => {
+    e.preventDefault();
+    const grade = classForm.grade.trim();
+    const section = classForm.section.trim().toUpperCase().replace(/\s+/g, '');
+    const subject = classForm.subject.trim();
+
+    if (!subject || !/^(8|9|10|11|12)[A-Z0-9]+$/.test(section) || !section.startsWith(grade)) {
+      showToast('error', 'Check Class Details', 'Enter a class code such as 9A that matches the selected grade, and add a subject.');
+      return;
+    }
+
+    if (classes.some((cls) => cls.section.toUpperCase() === section)) {
+      showToast('error', 'Class Already Exists', 'A class with this code already exists.');
+      return;
+    }
+
+    const newClass: ClassGroup = {
+      id: 'class-' + Date.now(),
+      grade,
+      section,
+      name: 'Grade ' + section,
+      subject,
+      room: classForm.room.trim(),
+      learnerCount: 0,
+      periodSchedule: classForm.periodSchedule.trim(),
+    };
+
+    onAddClass(newClass);
+    setSelectedClassTab(section);
+    setShowClassModal(false);
+    showToast('success', 'Class Created', newClass.name + ' is ready for learner records.');
+  };
+
   const handleOpenAdd = () => {
     setEditingLearner(null);
     setFormData({
@@ -81,7 +119,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
       lastName: '',
       gender: 'Female',
       grade: selectedClassTab === 'All' ? '9' : selectedClassTab.replace(/[^\d]/g, ''),
-      classSection: selectedClassTab === 'All' ? '9A' : selectedClassTab,
+      classSection: (classes.find((cls) => cls.section === selectedClassTab) || classes[0])?.section || '',
       dateOfBirth: '',
       guardianName: '',
       guardianPhone: '',
@@ -108,7 +146,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
       return;
     }
 
-    if (editingLearner) {
+    if (!classes.some((cls) => cls.section === formData.classSection)) {\n      showToast('error', 'Class Required', 'Create or select a class before registering a learner.');\n      return;\n    }\n\n    if (editingLearner) {
       const updated: Learner = {
         ...editingLearner,
         ...(formData as Learner),
@@ -118,13 +156,13 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
     } else {
       const created: Learner = {
         id: `lrn-${Date.now()}`,
-        learnerNumber: formData.learnerNumber || `TSS-2026-${Date.now().toString().slice(-3)}`,
+        learnerNumber: formData.learnerNumber || `L-${Date.now()}`,
         firstName: formData.firstName!,
         lastName: formData.lastName!,
         gender: formData.gender || 'Female',
         grade: formData.grade || '9',
         classSection: formData.classSection || '9A',
-        dateOfBirth: formData.dateOfBirth || '2011-01-01',
+        dateOfBirth: formData.dateOfBirth || '',
         guardianName: formData.guardianName!,
         guardianPhone: formData.guardianPhone || '',
         guardianEmail: formData.guardianEmail || '',
@@ -191,18 +229,18 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
 
       if (!firstName) errors.push('Missing first name');
       if (!lastName) errors.push('Missing last name');
-      if (!phone || phone.length < 9) errors.push('Invalid phone format');
+      if (!phone || phone.length < 9) errors.push('Invalid phone format');\n      if (!(values[numIdx >= 0 ? numIdx : 0] || '').trim()) errors.push('Missing learner number');\n      if (!(values[gnIdx >= 0 ? gnIdx : 6] || '').trim()) errors.push('Missing guardian name');\n      const classCode = values[clIdx >= 0 ? clIdx : 5] || '';\n      if (!classes.some((cls) => cls.section === classCode)) errors.push('Unknown class section');
 
       const learner: Partial<Learner> = {
         id: `lrn-csv-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-        learnerNumber: values[numIdx >= 0 ? numIdx : 0] || `TSS-2026-${Math.floor(Math.random() * 800 + 100)}`,
+        learnerNumber: values[numIdx >= 0 ? numIdx : 0] || '',
         firstName,
         lastName,
         gender: (values[genIdx >= 0 ? genIdx : 3] as any) || 'Female',
-        grade: values[grIdx >= 0 ? grIdx : 4] || '9',
-        classSection: values[clIdx >= 0 ? clIdx : 5] || '9A',
-        dateOfBirth: '2011-03-15',
-        guardianName: values[gnIdx >= 0 ? gnIdx : 6] || 'Guardian',
+        grade: values[grIdx >= 0 ? grIdx : 4] || '',
+        classSection: values[clIdx >= 0 ? clIdx : 5] || '',
+        dateOfBirth: '',
+        guardianName: values[gnIdx >= 0 ? gnIdx : 6] || '',
         guardianRelationship: (values[relIdx >= 0 ? relIdx : 7] as any) || 'Mother',
         guardianPhone: phone,
         guardianEmail: values[emIdx >= 0 ? emIdx : 9] || '',
@@ -287,7 +325,15 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
 
       {/* Class Cohorts KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {classes.map((cls) => {
+        {classes.length === 0 ? (
+          <div className="col-span-full rounded-2xl border border-dashed border-[#C9C5F0] bg-white p-6 text-center">
+            <h3 className="text-sm font-bold text-[#171936]">No classes created yet</h3>
+            <p className="text-xs text-gray-500 mt-1">Create a class first, then add learners or import a roster.</p>
+            <button type="button" onClick={handleOpenClassModal} className="mt-3 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#5145C5] text-white text-xs font-bold">
+              <Plus className="w-4 h-4" /> Create First Class
+            </button>
+          </div>
+        ) : classes.map((cls) => {
           const count = learners.filter((l) => l.classSection === cls.section).length;
           const isSelected = selectedClassTab === cls.section;
           return (
@@ -513,7 +559,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">Class Section</label>
                   <select
-                    value={formData.classSection || '9A'}
+                    value={formData.classSection || ''}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
@@ -652,14 +698,14 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
             {csvStep === 'input' ? (
               <div className="space-y-4 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-gray-700">Paste CSV Contents or Load Sample</span>
+                  <span className="font-bold text-gray-700">Paste CSV Contents or Load Header</span>
                   <button
                     type="button"
                     onClick={handleLoadSampleCsv}
                     className="flex items-center gap-1 text-[#5145C5] font-bold hover:underline"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span>Load Sample South African CSV</span>
+                    <span>Load CSV Header</span>
                   </button>
                 </div>
 
