@@ -38,6 +38,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   onUpdateLearner,
   onDeleteLearner,
   onBatchImportLearners,
+  onAddClass,
 }) => {
   const { showToast } = useToast();
 
