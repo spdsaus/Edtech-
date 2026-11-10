@@ -70,7 +70,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
     homeLanguage: 'zu',
     specialNeedsNotes: '',
     academicNotes: '',
-    consentStatus: 'opted-in',
+    consentStatus: 'pending',
   });
 
   const handleOpenAdd = () => {
@@ -90,7 +90,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
       homeLanguage: 'zu',
       specialNeedsNotes: '',
       academicNotes: '',
-      consentStatus: 'opted-in',
+      consentStatus: 'pending',
     });
     setShowAddEditModal(true);
   };
@@ -132,7 +132,7 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
         homeLanguage: formData.homeLanguage || 'zu',
         specialNeedsNotes: formData.specialNeedsNotes,
         academicNotes: formData.academicNotes,
-        consentStatus: formData.consentStatus || 'opted-in',
+        consentStatus: formData.consentStatus || 'pending',
       };
       onAddLearner(created);
       showToast('success', 'Learner Added', `${created.firstName} ${created.lastName} registered in ${created.classSection}.`);
@@ -149,14 +149,10 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   };
 
   // CSV Parsing & Validation
-  const sampleCsvData = `LearnerNumber,FirstName,LastName,Gender,Grade,Class,GuardianName,Relationship,Phone,Email,Language
-TSS-2026-021,Kholofelo,Mashishi,Male,9,9A,Mrs. Pinky Mashishi,Mother,+27 82 341 9021,pmashishi@gmail.com,zu
-TSS-2026-022,Wandile,Ndaba,Female,9,9A,Mr. Joseph Ndaba,Father,+27 71 884 1209,jndaba@saps.gov.za,zu
-TSS-2026-023,Bianca,Botha,Female,10,10B,Mev. Sonja Botha,Mother,+27 84 319 4481,sonja.botha@vodamail.co.za,af
-TSS-2026-024,Thulani,Mthembu,Male,11,11A,Gogo Nomsa Mthembu,Grandmother,+27 76 991 3042,,zu`;
+  const sampleCsvData = 'LearnerNumber,FirstName,LastName,Gender,Grade,Class,GuardianName,Relationship,Phone,Email,Language';
 
   const handleLoadSampleCsv = () => {
-    setCsvRawText(sampleCsvData);
+    setCsvRawText(sampleCsvData);\n    showToast('info', 'CSV Header Loaded', 'Add your own rows. No sample learner records are included.');
   };
 
   const handleParseCsv = () => {
