@@ -322,7 +322,6 @@ function MainApp() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
         settings={settings}
-        onToggleOnline={handleToggleOnline}
         onResetDemo={handleResetDemoData}
         pendingTasksCount={pendingTasksCount}
         unreadParentsCount={unreadParentsCount}
@@ -333,7 +332,6 @@ function MainApp() {
         <Header
           activeTab={activeTab}
           settings={settings}
-          onToggleOnline={handleToggleOnline}
           onOpenQuickAction={handleOpenQuickAction}
           onResetDemo={handleResetDemoData}
           onOpenOnboarding={() => setIsOnboardingOpen(true)}
