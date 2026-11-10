@@ -28,7 +28,8 @@ interface MyClassesViewProps {
   onAddLearner: (learner: Learner) => void;
   onUpdateLearner: (learner: Learner) => void;
   onDeleteLearner: (learnerId: string) => void;
-  onBatchImportLearners: (newLearners: Learner[]) => void;\n  onAddClass: (classGroup: ClassGroup) => void;
+  onBatchImportLearners: (newLearners: Learner[]) => void;
+  onAddClass: (classGroup: ClassGroup) => void;
 }
 
 export const MyClassesView: React.FC<MyClassesViewProps> = ({
@@ -48,7 +49,9 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   // Modals
   const [showAddEditModal, setShowAddEditModal] = useState<boolean>(false);
   const [editingLearner, setEditingLearner] = useState<Learner | null>(null);
-  const [showCsvModal, setShowCsvModal] = useState<boolean>(false);\n  const [showClassModal, setShowClassModal] = useState<boolean>(false);\n  const [classForm, setClassForm] = useState({ grade: '9', section: '', subject: '', room: '', periodSchedule: '' });
+  const [showCsvModal, setShowCsvModal] = useState<boolean>(false);
+  const [showClassModal, setShowClassModal] = useState<boolean>(false);
+  const [classForm, setClassForm] = useState({ grade: '9', section: '', subject: '', room: '', periodSchedule: '' });
 
   // CSV State
   const [csvRawText, setCsvRawText] = useState<string>('');
@@ -147,7 +150,12 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
       return;
     }
 
-    if (!classes.some((cls) => cls.section === formData.classSection)) {\n      showToast('error', 'Class Required', 'Create or select a class before registering a learner.');\n      return;\n    }\n\n    if (editingLearner) {
+    if (!classes.some((cls) => cls.section === formData.classSection)) {
+      showToast('error', 'Class Required', 'Create or select a class before registering a learner.');
+      return;
+    }
+
+    if (editingLearner) {
       const updated: Learner = {
         ...editingLearner,
         ...(formData as Learner),
@@ -191,7 +199,8 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
   const sampleCsvData = 'LearnerNumber,FirstName,LastName,Gender,Grade,Class,GuardianName,Relationship,Phone,Email,Language';
 
   const handleLoadSampleCsv = () => {
-    setCsvRawText(sampleCsvData);\n    showToast('info', 'CSV Header Loaded', 'Add your own rows. No sample learner records are included.');\n    showToast('info', 'CSV Header Loaded', 'Add your own rows. No sample learner records are included.');
+    setCsvRawText(sampleCsvData);
+    showToast('info', 'CSV Header Loaded', 'Add your own rows. No sample learner records are included.');
   };
 
   const handleParseCsv = () => {
@@ -230,7 +239,11 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
 
       if (!firstName) errors.push('Missing first name');
       if (!lastName) errors.push('Missing last name');
-      if (!phone || phone.length < 9) errors.push('Invalid phone format');\n      if (!(values[numIdx >= 0 ? numIdx : 0] || '').trim()) errors.push('Missing learner number');\n      if (!(values[gnIdx >= 0 ? gnIdx : 6] || '').trim()) errors.push('Missing guardian name');\n      const classCode = values[clIdx >= 0 ? clIdx : 5] || '';\n      if (!classes.some((cls) => cls.section === classCode)) errors.push('Unknown class section');
+      if (!phone || phone.length < 9) errors.push('Invalid phone format');
+      if (!(values[numIdx >= 0 ? numIdx : 0] || '').trim()) errors.push('Missing learner number');
+      if (!(values[gnIdx >= 0 ? gnIdx : 6] || '').trim()) errors.push('Missing guardian name');
+      const classCode = values[clIdx >= 0 ? clIdx : 5] || '';
+      if (!classes.some((cls) => cls.section === classCode)) errors.push('Unknown class section');
 
       const learner: Partial<Learner> = {
         id: `lrn-csv-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
