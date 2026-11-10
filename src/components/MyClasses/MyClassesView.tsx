@@ -315,7 +315,10 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" onClick={handleOpenClassModal} className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#5145C5] text-xs font-semibold">
+            <Plus className="w-4 h-4" /><span>Add Class</span>
+          </button>
           <button
             onClick={() => {
               setCsvStep('input');
@@ -329,6 +332,8 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
 
           <button
             onClick={handleOpenAdd}
+            disabled={classes.length === 0}
+            title={classes.length === 0 ? 'Create a class before adding learners' : 'Add a learner'}
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#5145C5] text-white text-xs font-bold hover:bg-[#4337b0] transition-colors shadow-sm active:scale-95"
           >
             <Plus className="w-4 h-4" />
@@ -631,10 +636,8 @@ export const MyClassesView: React.FC<MyClassesViewProps> = ({
                     }
                     className="w-full px-2 py-2 rounded-xl border border-gray-200 bg-white"
                   >
-                    <option value="9A">9A (Natural Sciences)</option>
-                    <option value="9B">9B (Natural Sciences)</option>
-                    <option value="10B">10B (Life Sciences)</option>
-                    <option value="11A">11A (Life Sciences)</option>
+                    <option value="">Select a class</option>
+                    {classes.map((cls) => <option key={cls.id} value={cls.section}>{cls.name} ({cls.subject})</option>)}
                   </select>
                 </div>
                 <div>
